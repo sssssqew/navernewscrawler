@@ -1,0 +1,75 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>네이버 뉴스 크롤러</title>
+	
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<!-- Load c3.css -->
+	<link href="/static/c3-0.4.11/c3.min.css" rel="stylesheet" type="text/css">
+	<!-- Load d3.js and c3.js -->
+	<script src="/static/c3-0.4.11/d3.v3.min.js" charset="utf-8"></script>
+	<script src="/static/c3-0.4.11/c3.min.js"></script>
+
+</head>
+<body>
+	<div class="page-header">
+        <h2 class="text-center">네이버 뉴스 기사 분석결과</h2>
+        <div class="pull-right">
+        	</div>
+    </div>
+    <div class="row">
+	    <form action="{% url 'keyword_store' %}" method="POST" style="margin-bottom:3%">
+	        	{% csrf_token %}
+		  <div class="col-lg-6 col-lg-offset-3">
+		    <div class="input-group">
+		      <input type="text" class="form-control" name="keywords" placeholder="키워드 입력... (콤마로 구분)">
+		      <span class="input-group-btn">
+		        <button class="btn btn-default" type="submit">생성</button>
+		      </span>
+		    </div>
+		  </div>
+	    </form>
+
+	    <form action="{% url 'keyword_list' %}" method="POST">
+	        	{% csrf_token %}
+		  <div class="col-lg-6 col-lg-offset-3">
+		    <div class="input-group">
+		      <input type="text" class="form-control" name="selected_keywords" placeholder="키워드 입력... (콤마로 구분)">
+		      <input type="date" class="form-control" name="start_date_search" placeholder="from">
+		      <input type="date" class="form-control" name="end_date_search" placeholder="to">
+		      <span class="input-group-btn">
+		        <button class="btn btn-success" type="submit">조회</button>
+		      </span>
+		    </div>
+		  </div>
+	    </form>
+
+	    <form action="{% url 'download_to_csv' %}" method="POST">
+	        	{% csrf_token %}
+		  <div class="col-lg-6 col-lg-offset-3">
+		    <div class="input-group">
+		      <input type="text" class="form-control" name="selected_keywords" placeholder="키워드 입력... (콤마로 구분)">
+		      <input type="date" class="form-control" name="start_date_search" placeholder="from">
+		      <input type="date" class="form-control" name="end_date_search" placeholder="to">
+		      <span class="input-group-btn">
+		        <button class="btn btn-warning" type="submit">csv</button>
+		      </span>
+		    </div>
+		  </div>
+	    </form>
+	</div>
+
+	{% block content %}
+	{% endblock %}
+</body>
+</html>

@@ -1,0 +1,72 @@
+{% extends 'crawler/base.html' %}
+
+{% block content %}
+
+{% if is_saved_alarm %}
+<div class="row" style="margin-top: 2%">   
+    <div class="col-lg-6 col-lg-offset-3">
+        <div class="alert alert-success alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <strong>성공!</strong> 검색한 단어가 DB에 저장되었습니다.
+        </div>
+    </div>
+</div>
+{% endif %}
+{% if not_keys  %}
+<div class="row" style="margin-top: 2%">   
+    <div class="col-lg-6 col-lg-offset-3">
+        <div class="alert alert-warning alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <strong>경고!</strong> [
+          {% for not_key in not_keys %}
+          {{ not_key }} 
+          {% if not forloop.last %},{% endif %}
+          {% endfor %}
+          ] 는 존재하지 않는 단어입니다. 먼저 검색하세요. 
+        </div>
+    </div>
+</div>
+{% endif %}
+{% if not isExistData %}
+<div class="row" style="margin-top: 2%">   
+    <div class="col-lg-6 col-lg-offset-3">
+        <div class="alert alert-danger alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <strong>알림!</strong> 조회결과가 없습니다. 
+        </div>
+    </div>
+</div>
+{% else %}
+
+<div id="chart"  style="margin-top:7%;"></div>
+<script type="text/javascript">
+    var columns_json = '{{ columns|safe }}';
+    console.log(columns_json);
+    var col = JSON.parse(columns_json);
+    console.log(col);
+
+    var chart = c3.generate({
+        data: {
+            x: 'x',
+            columns: col
+        },
+        axis: {
+            x: {
+                type: 'timeseries',
+                tick: {
+                    format: '%Y-%m-%d'
+                }
+            }
+        },
+        grid: {
+            x: {
+                show: true
+            },
+            y: {
+                show: true
+            }
+        }
+    });
+</script>
+{% endif %}
+{% endblock %}
