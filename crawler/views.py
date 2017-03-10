@@ -234,9 +234,11 @@ def store(request):
 
 
 def csvWriter(request):
+	today = datetime.datetime.now().strftime("%Y-%m-%d")
 	# Create the HttpResponse object with the appropriate CSV header.
 	response = HttpResponse(content_type='text/csv')
-	response['Content-Disposition'] = 'attachment; filename="navernews.csv"'
+	filename = "navernews_" + today+".csv"
+	response['Content-Disposition'] = 'attachment; filename=' + filename
 	writer = csv.writer(response)
 
 	try: 
