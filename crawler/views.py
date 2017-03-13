@@ -280,9 +280,12 @@ def csvWriter(request):
 				date = y[np.where(condition)].tolist()
 				data = z[np.where(condition)].tolist()
 
+				suffix = u'(뉴)'
+				# print type(suffix.encode('euc-kr'))
+
 				for i in range(len(date)):
 
-					writer.writerow([key_model.name.encode('utf-8')+'(뉴)', date[i], data[i], data[i], data[i], data[i]])
+					writer.writerow([key_model.name.encode('euc-kr')+suffix.encode('euc-kr'), date[i].encode('euc-kr'), data[i].encode('euc-kr'), data[i].encode('euc-kr'), data[i].encode('euc-kr'), data[i].encode('euc-kr')])
 					# print type(key_model.name.encode('utf-8'))
 
 			except:
