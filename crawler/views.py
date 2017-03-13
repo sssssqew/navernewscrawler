@@ -18,7 +18,7 @@ import timeit
 import csv
 
 # 데이터 수집기간 설정 
-TERM = 1
+TERM = 5
 
 # URL 쿼리 설정 
 TARGET_URL_BEFORE_QUERY = 'https://search.naver.com/search.naver?where=news&se=0&query='
@@ -28,7 +28,7 @@ TARGET_URL_REST = '%2Ca%3Aall&mynews=0&mson=0&refresh_start=0&related=0'
 
 # 검색할 기간의 날짜 생성  
 def createDaysForYear(term):
-	start_date = datetime.datetime.now() - relativedelta(years=term)
+	start_date = datetime.datetime.now() - relativedelta(days=term)
 	end_date = datetime.datetime.now() + datetime.timedelta(days=1)
 	
 	days = []
@@ -210,6 +210,9 @@ def store(request):
 				row.append(key)
 				row.append(days[i].strftime("%Y-%m-%d"))
 				row.append(num_news_list[i])
+				# print type(key)
+				# print type(days[i].strftime("%Y-%m-%d"))
+				# print type(num_news_list[i])
 				record_data[key].append(row)
 
 			# record_data[key].insert(0, key)
