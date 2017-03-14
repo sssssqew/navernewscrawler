@@ -133,7 +133,7 @@ def index(request):
 				key_model = Keyword.objects.get(name=selected_keyword)
 				if(key_model):
 					print "model exist in DB"
-					print key_model.name
+					# print key_model.name (aws에서 완전히 삭제해야 동작함)
 
 				numOfNews = json.loads(key_model.numOfNews)
 				np_numOfNews = np.array(numOfNews) # list to np array
@@ -187,7 +187,7 @@ def store(request):
 	for key in keys:
 		try:
 			key_model = Keyword.objects.get(name=key)
-			print ("\n" + key + '  is already exists in database !!')
+			# print ("\n" + key + '  is already exists in database !!') (aws에서 완전히 삭제해야 동작함)
 
 		except:
 			record_data = {}
@@ -224,7 +224,7 @@ def store(request):
 			)
 			key_model.publish()
 			key_model.save() 
-			print ("\n" + key + '  just saved in database !!')
+			# print ("\n" + key + '  just saved in database !!') (aws에서 완전히 삭제해야 동작함)
 			is_saved = 1
 
 	# 실행시간 표시 
@@ -270,7 +270,7 @@ def csvWriter(request):
 				key_model = Keyword.objects.get(name=selected_keyword)
 				if(key_model):
 					print "model exist in DB"
-					print key_model.name
+					# print key_model.name (aws에서 완전히 삭제해야 동작함)
 				
 				numOfNews = json.loads(key_model.numOfNews)
 				np_numOfNews = np.array(numOfNews) # list to np array
