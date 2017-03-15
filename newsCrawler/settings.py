@@ -122,5 +122,5 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 CRONJOBS = [
-    ('0 0 * * *', 'crawler.cron.my_scheduled_job', '>> /home/leesy/dev/dna/newsCrawler/crawler/scheduled_job.log'), 
+    ('0 22 * * *', 'crawler.cron.my_scheduled_job', '>> /home/leesy/dev/dna/newsCrawler/crawler/scheduled_job.log'), 
 ]
