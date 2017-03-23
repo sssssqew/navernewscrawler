@@ -40,6 +40,16 @@
 		  </div>
 	    </form>
 
+	   <!-- 파일 입력  -->
+	   <form action="{% url 'keyword_store' %}" method="post" enctype="multipart/form-data"> 
+	   	{% csrf_token %}
+	   	 <div class="col-lg-6 col-lg-offset-3">
+            <input type="file" name="file" id="file" />
+            <input type="submit" value="Upload" /> 
+           </div>
+        </form> 
+	   <!-- 끝 -->
+
 	    <form action="{% url 'keyword_list' %}" method="POST">
 	        	{% csrf_token %}
 		  <div class="col-lg-6 col-lg-offset-3">
@@ -68,6 +78,7 @@
 		  </div>
 	    </form>
 	</div>
+
 
 	{% block content %}
 	{% endblock %}

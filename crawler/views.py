@@ -16,9 +16,10 @@ import numpy as np
 import multiprocessing
 import timeit
 import csv
+import collections
 
 # 데이터 수집기간 설정 
-TERM = 5
+TERM = 1
 
 # URL 쿼리 설정 
 TARGET_URL_BEFORE_QUERY = 'https://search.naver.com/search.naver?where=news&se=0&query='
@@ -29,7 +30,7 @@ TARGET_URL_REST = '%2Ca%3Aall&mynews=0&mson=0&refresh_start=0&related=0'
 # 검색할 기간의 날짜 생성  
 def createDaysForYear(term):
 	start_date = datetime.datetime.now() - relativedelta(days=term)
-	end_date = datetime.datetime.now() + datetime.timedelta(days=1)
+	end_date = datetime.datetime.now() 
 	
 	days = []
 	d = start_date
@@ -175,13 +176,31 @@ def index(request):
 
 # 검색 페이지 
 def store(request):
+
 	is_saved = 0
 	start_time = timeit.default_timer()
-	keywords = request.POST['keywords']
+
+	if request.method == 'POST':
+		# 파일 입력 
+		if 'file' in request.FILES:
+			keywords = []
+			file = request.FILES['file']
+			print "-------------------"
+			# print request.charset
+			csvReader = csv.reader(file)
+
+			for k in csvReader:
+				print k[1].decode('euc-kr') # file encoding에 따라 변경 
+				keywords.append(k[1].decode('euc-kr'))
+			keys = keywords
+		# 직접 입력 
+		else:
+			keywords = request.POST['keywords']
+			keys = delete_spaces(keywords)
 
 	# 수집할 검색어 및 날짜 배열 만들기 
-	keys = delete_spaces(keywords)
 	days = createDaysForYear(TERM)
+	print days 
 	
 	# DB 저장 
 	for key in keys:
@@ -190,7 +209,7 @@ def store(request):
 			# print ("\n" + key + '  is already exists in database !!') (aws에서 완전히 삭제해야 동작함)
 
 		except:
-			record_data = {}
+			record_data = collections.OrderedDict()
 			URLS = []
 
 			# URL 리스트 생성 
