@@ -70,6 +70,8 @@
 	   	{% csrf_token %}
 	   	 <div class="col-lg-6 col-lg-offset-3">
             <input type="file" name="file" id="file" />
+            <input type="date" class="form-control" name="start_date_search" placeholder="from">
+		    <input type="date" class="form-control" name="end_date_search" placeholder="to">
             <input type="submit" value="CSV" /> 
            </div>
         </form> 
