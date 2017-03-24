@@ -45,7 +45,7 @@
 	   	{% csrf_token %}
 	   	 <div class="col-lg-6 col-lg-offset-3">
             <input type="file" name="file" id="file" />
-            <input type="submit" value="Upload" /> 
+            <input type="submit" value="생성" /> 
            </div>
         </form> 
 	   <!-- 끝 -->
@@ -63,6 +63,17 @@
 		    </div>
 		  </div>
 	    </form>
+		
+		<!-- <br><br> -->
+	    <!-- 파일 입력  -->
+	   <form action="{% url 'download_to_csv' %}" method="post" enctype="multipart/form-data"> 
+	   	{% csrf_token %}
+	   	 <div class="col-lg-6 col-lg-offset-3">
+            <input type="file" name="file" id="file" />
+            <input type="submit" value="CSV" /> 
+           </div>
+        </form> 
+	   <!-- 끝 -->
 
 	    <form action="{% url 'download_to_csv' %}" method="POST">
 	        	{% csrf_token %}
@@ -72,7 +83,7 @@
 		      <input type="date" class="form-control" name="start_date_search" placeholder="from">
 		      <input type="date" class="form-control" name="end_date_search" placeholder="to">
 		      <span class="input-group-btn">
-		        <button class="btn btn-warning" type="submit">csv</button>
+		        <button class="btn btn-warning" type="submit">CSV</button>
 		      </span>
 		    </div>
 		  </div>

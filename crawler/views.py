@@ -19,13 +19,15 @@ import csv
 import collections
 
 # 데이터 수집기간 설정 
-TERM = 1
+TERM = 3
 
 # URL 쿼리 설정 
 TARGET_URL_BEFORE_QUERY = 'https://search.naver.com/search.naver?where=news&se=0&query='
 TARGET_URL_BEFORE_FRONT_DATE = '&ie=utf8&sm=tab_opt&sort=0&photo=0&field=0&reporter_article=&pd=3&ds='
 TARGET_URL_BEFORE_BACK_DATE = '&docid=&nso=so%3Ar%2Cp%3Afrom'
 TARGET_URL_REST = '%2Ca%3Aall&mynews=0&mson=0&refresh_start=0&related=0'
+
+is_saved = 0
 
 # 검색할 기간의 날짜 생성  
 def createDaysForYear(term):
@@ -92,7 +94,7 @@ def delete_spaces(words):
 
 # 조회 페이지 
 def index(request):
-	
+	global is_saved
 	# json dums : string
 	# json loads: list
 	print "--------------------------------------"
@@ -105,13 +107,12 @@ def index(request):
 	context = {}
 
 	# DB 저장 체크 
-	if request.GET.get('is_saved'):
-		is_saved_alarm = int(request.GET.get('is_saved'))
+	if is_saved:
+		is_saved_alarm = 1
+		is_saved = 0
 
-	try: 
+	if request.method == 'POST':
 		selected_keywords = delete_spaces(request.POST['selected_keywords'])
-	except:
-		print "model successfully created !!"
 		
 	if selected_keywords:
 		not_exist_keys = []
@@ -190,7 +191,7 @@ def store(request):
 			csvReader = csv.reader(file)
 
 			for k in csvReader:
-				print k[1].decode('euc-kr') # file encoding에 따라 변경 
+				# print k[1].decode('euc-kr') # file encoding에 따라 변경 (aws 에러남)
 				keywords.append(k[1].decode('euc-kr'))
 			keys = keywords
 		# 직접 입력 
@@ -243,7 +244,8 @@ def store(request):
 			)
 			key_model.publish()
 			key_model.save() 
-			# print ("\n" + key + '  just saved in database !!') (aws에서 완전히 삭제해야 동작함)
+			# print ("\n" + key + '  just saved in database !!') # aws에서 완전히 삭제해야 동작함
+			global is_saved
 			is_saved = 1
 
 	# 실행시간 표시 
@@ -252,7 +254,7 @@ def store(request):
 	print "실행시간(s): " + str(round(elapsed , 3)) + ' s'
 	print "실행시간(min) : " + str(round(elapsed / 60 , 3)) + ' min'
 
-	return HttpResponseRedirect("/"+"?is_saved="+str(is_saved))
+	return HttpResponseRedirect("/")
 
 
 def csvWriter(request):
@@ -263,11 +265,28 @@ def csvWriter(request):
 	response['Content-Disposition'] = 'attachment; filename=' + filename
 	writer = csv.writer(response)
 
-	try: 
-		selected_keywords = delete_spaces(request.POST['selected_keywords'])
-		print selected_keywords
-	except:
-		print "you haven't enter keywords !!"
+	if request.method == 'POST':
+		# 파일 입력 
+		if 'file' in request.FILES:
+			selected_keywords = []
+			file = request.FILES['file']
+			print "-------------------"
+			# print request.charset
+			csvReader = csv.reader(file)
+
+			for k in csvReader:
+				# print k[1].decode('euc-kr') # file encoding에 따라 변경 (aws 에러남)
+				selected_keywords.append(k[1].decode('euc-kr'))
+			
+		# 직접 입력 
+		else:
+			selected_keywords = delete_spaces(request.POST['selected_keywords'])
+
+	# try: 
+	# 	selected_keywords = delete_spaces(request.POST['selected_keywords'])
+	# 	print selected_keywords
+	# except:
+	# 	print "you haven't enter keywords !!"
 
 
 	if selected_keywords:
