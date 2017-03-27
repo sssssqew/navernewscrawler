@@ -1,39 +1,15 @@
-# README #
-
-This README would normally document whatever steps are necessary to get your application up and running.
-
-### What is this repository for? ###
-
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
-
-### How do I get set up? ###
-
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-* Other community or team contact
 ```
 ...
-DB_CENTER_CONNECTION=mysql
-DB_CENTER_HOST=mysql
-DB_CENTER_PORT=3306
-DB_CENTER_DATABASE=members
-DB_CENTER_USERNAME=members
-DB_CENTER_PASSWORD=1
+0. 가상환경 생성 및 필요모듈 설치하기 
+1. sudo pip install mod_wsgi-httpd 
+2. sudo pip install mod_wsgi 
+3. pip freeze 로 전역환경에 설치되었음을 확인하기 
+4. settings.py에 INSTALLED_APPS 설정에 'mod_wsgi.server' 추가하기
+5. 정적(static)파일 생성하기 
+-> python manage.py collectstatic
+5. manage.py 파일이 위치한 곳에서 mod_wsgi 실행하기 
+-> python manage.py runmodwsgi --setup-only --user sylee --group sylee --server-root=/tmp/mod_wsgi-localhost:8000:1012
+6. 아파치 실행 또는 재실행하기 
+-> /tmp/mod_wsgi-localhost:8000:1012/apachectl start(restart)
 ...
 ```
