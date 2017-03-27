@@ -28,7 +28,7 @@
         	</div>
     </div>
     <div class="row">
-	    <form action="{% url 'keyword_store' %}" method="POST" style="margin-bottom:3%">
+	    <form action="{% url 'keyword_store' %}" method="POST" style="margin-bottom:2%">
 	        	{% csrf_token %}
 		  <div class="col-lg-6 col-lg-offset-3">
 		    <div class="input-group">
@@ -40,23 +40,23 @@
 		  </div>
 	    </form>
 
-
+	    
 		<form action="{% url 'keyword_store' %}" method="post" enctype="multipart/form-data"> 
 	   	{% csrf_token %}
 		<div class="col-lg-6 col-lg-offset-3">
 		   <div class="input-group">
                 <label class="input-group-btn">
                     <span class="btn btn-primary">
-                        Browse… <input type="file" name="file" id="file" style="display: none;">
+                        Browse… <input type="file" name="file" id="file1" style="display: none;">
                     </span>
                 </label>
-                <input type="text" id="fname" class="form-control" readonly="">
+                <input type="text" id="fname-1" class="form-control" readonly="">
             </div>
 		    <input type="submit" value="생성" />
          </div>
         </form> 
 
-
+		<div style="margin-top:7%;margin-bottom: 7%">
 	    <form action="{% url 'keyword_list' %}" method="POST">
 	        	{% csrf_token %}
 		  <div class="col-lg-6 col-lg-offset-3">
@@ -70,8 +70,9 @@
 		    </div>
 		  </div>
 	    </form>
+	    </div>
 		
-		
+	<div style="margin-top:7%;margin-bottom: 7%">
 	   <!-- 파일 입력  -->
 	   <form action="{% url 'download_to_csv' %}" method="post" enctype="multipart/form-data"> 
 	   	{% csrf_token %}
@@ -79,17 +80,17 @@
 		   <div class="input-group">
                 <label class="input-group-btn">
                     <span class="btn btn-primary">
-                        Browse… <input type="file" name="file" id="file" style="display: none;">
+                        Browse… <input type="file" name="file" id="file2" style="display: none;">
                     </span>
                 </label>
-                <input type="text" id="fname" class="form-control" readonly="">
+                <input type="text" id="fname-2" class="form-control" readonly="">
             </div>
             <input type="date" class="form-control" name="start_date_search" placeholder="from">
 		    <input type="date" class="form-control" name="end_date_search" placeholder="to">
 		    <input type="submit" value="CSV" />
          </div>
         </form> 
-
+	</div>
 
 	    <form action="{% url 'download_to_csv' %}" method="POST">
 	        	{% csrf_token %}
