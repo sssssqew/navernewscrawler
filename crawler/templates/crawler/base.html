@@ -107,7 +107,24 @@
 	    </form>
 	</div>
 
-
+	<div style="margin-top:2%;margin-bottom: 7%">
+	<form action="{% url 'keyword_delete' %}" method="post" enctype="multipart/form-data"> 
+	   	{% csrf_token %}
+		<div class="col-lg-6 col-lg-offset-3">
+		   <div class="input-group">
+                <label class="input-group-btn">
+                    <span class="btn btn-primary">
+                        Browse… <input type="file" name="file" id="file3" style="display: none;">
+                    </span>
+                </label>
+                <input type="text" id="fname-3" class="form-control" readonly="">
+            </div>
+            <input type="date" class="form-control" name="start_date_search" placeholder="from">
+		    <input type="date" class="form-control" name="end_date_search" placeholder="to">
+		    <input type="submit" value="삭제" />
+         </div>
+     </form>
+     </div>
 	{% block content %}
 	{% endblock %}
 </body>

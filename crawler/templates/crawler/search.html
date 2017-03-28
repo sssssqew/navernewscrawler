@@ -98,6 +98,19 @@
           console.log('label');
           $('#fname-2').val(label);
       });
+      $('#file3').on('fileselect', function(event, numFiles, label) {
+          console.log(numFiles);
+          console.log(label);
+      });
+      // show file name 
+      $(document).on('change', '#file3', function() {
+          var input = $(this),
+              numFiles = input.get(0).files ? input.get(0).files.length : 1,
+              label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+          input.trigger('fileselect', [numFiles, label]);
+          console.log('label');
+          $('#fname-3').val(label);
+      });
     });
 
 </script>

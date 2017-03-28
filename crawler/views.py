@@ -19,7 +19,8 @@ import csv
 import collections
 
 # 데이터 수집기간 설정 
-TERM = 3
+# TERM = 1 # 어제 하루치 데이터 
+TERM = 5
 
 # URL 쿼리 설정 
 TARGET_URL_BEFORE_QUERY = 'https://search.naver.com/search.naver?where=news&se=0&query='
@@ -334,6 +335,67 @@ def csvWriter(request):
 				not_exist_keys.append(selected_keyword)
 
 	return response
+
+
+def delete(request):
+	if request.method == 'POST':
+		# 파일 입력 
+		if 'file' in request.FILES:
+			selected_keywords = []
+			file = request.FILES['file']
+			print "-------------------"
+			# print request.charset
+			csvReader = csv.reader(file)
+
+			for k in csvReader:
+				# print k[1].decode('euc-kr') # file encoding에 따라 변경 (aws 에러남)
+				selected_keywords.append(k[1].decode('euc-kr'))
+			
+		# 직접 입력 
+		else:
+			selected_keywords = delete_spaces(request.POST['selected_keywords'])
+
+	if selected_keywords:
+		not_exist_keys = []
+		try:
+			start_date_search = datetime.datetime.strptime(request.POST['start_date_search'], "%Y-%m-%d")
+		except:
+			start_date_search = datetime.datetime.strptime('2012-03-02', "%Y-%m-%d")
+		try:
+			end_date_search = datetime.datetime.strptime(request.POST['end_date_search'], "%Y-%m-%d")
+		except:
+			end_date_search = datetime.datetime.now()
+
+		# DB 조회 
+		for selected_keyword in selected_keywords:
+			try:
+				
+				key_model = Keyword.objects.get(name=selected_keyword)
+				if(key_model):
+					print "model exist in DB"
+					# print key_model.name (aws에서 완전히 삭제해야 동작함)
+				
+				numOfNews = json.loads(key_model.numOfNews)
+				np_numOfNews = np.array(numOfNews) # list to np array
+				x = np_numOfNews[:, 0] # np array (keyword)
+				y = np_numOfNews[:, 1] # np array (date)
+				z = np_numOfNews[:, 2] # np array (number of news)
+				y_map = np.array(map(lambda p: datetime.datetime.strptime(p, "%Y-%m-%d"), y)) # np array
+
+				condition = np.logical_and(y_map >=  start_date_search, y_map <= end_date_search)
+
+				np_numOfNews_deleted = np_numOfNews[np.logical_not(condition)] # 특정조건을 만족하는 행 제외 
+				print type(np_numOfNews_deleted.tolist())
+
+				key_model.numOfNews = json.dumps(np_numOfNews_deleted.tolist())
+				key_model.save(update_fields=['numOfNews'])
+
+			except:
+				print "model doesn't exist in DB"
+				not_exist_keys.append(selected_keyword)
+
+
+	return HttpResponseRedirect("/")
 
 
 
