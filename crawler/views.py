@@ -29,6 +29,7 @@ TARGET_URL_BEFORE_BACK_DATE = '&docid=&nso=so%3Ar%2Cp%3Afrom'
 TARGET_URL_REST = '%2Ca%3Aall&mynews=0&mson=0&refresh_start=0&related=0'
 
 is_saved = 0
+is_deleted = 0
 
 # 검색할 기간의 날짜 생성  
 def createDaysForYear(term):
@@ -96,6 +97,7 @@ def delete_spaces(words):
 # 조회 페이지 
 def index(request):
 	global is_saved
+	global is_deleted
 	# json dums : string
 	# json loads: list
 	print "--------------------------------------"
@@ -103,6 +105,7 @@ def index(request):
 
 	isExist = False
 	is_saved_alarm = 0
+	is_deleted_alarm = 0
 
 	selected_keywords = []
 	context = {}
@@ -111,6 +114,10 @@ def index(request):
 	if is_saved:
 		is_saved_alarm = 1
 		is_saved = 0
+
+	if is_deleted:
+		is_deleted_alarm = 1
+		is_deleted = 0
 
 	if request.method == 'POST':
 		selected_keywords = delete_spaces(request.POST['selected_keywords'])
@@ -170,8 +177,11 @@ def index(request):
 		else:
 			context = {"not_keys":not_exist_keys, "isExistData":isExist}
 	else:
-		# print "sel is not !!"
-		context = {"is_saved_alarm":is_saved_alarm, "isExistData":isExist}
+		if is_saved_alarm:
+			context = {"is_saved_alarm":is_saved_alarm, "isExistData":isExist}
+		elif is_deleted_alarm :
+			context = {"is_deleted_alarm":is_deleted_alarm, "isExistData":isExist}
+
 
 	return render(request, 'crawler/search.html', context)
 
@@ -389,6 +399,8 @@ def delete(request):
 
 				key_model.numOfNews = json.dumps(np_numOfNews_deleted.tolist())
 				key_model.save(update_fields=['numOfNews'])
+				global is_deleted
+				is_deleted = 1
 
 			except:
 				print "model doesn't exist in DB"
