@@ -66,7 +66,9 @@ def my_scheduled_job():
 	log_time = datetime.datetime.now(tz=tz).strftime("%Y-%m-%d %H:%M:%S")
 	print "log time : " + log_time + "-----> cron job executed !!"
 
-	keys = ['문재인', '황교안', '안희정', '안철수', '유승민', '이재명']
+	# keys = ['문재인', '황교안', '안희정', '안철수', '유승민', '이재명']
+	# db에 저장된 모든 키워드 메모리로 가져옴 
+	keys = Keyword.objects.all()
 	today = datetime.datetime.now()
 
 	URLS = []
