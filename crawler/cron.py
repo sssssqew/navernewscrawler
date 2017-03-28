@@ -28,7 +28,7 @@ def createUrlQuery(keword, day):
 							+ back_date + 'to' \
 							+ back_date \
 							+ TARGET_URL_REST
-
+	# print front_date 
 	return query
 
 # 뉴스 건수 추출 
@@ -66,9 +66,10 @@ def my_scheduled_job():
 	log_time = datetime.datetime.now(tz=tz).strftime("%Y-%m-%d %H:%M:%S")
 	print "log time : " + log_time + "-----> cron job executed !!"
 
-	# keys = ['문재인', '황교안', '안희정', '안철수', '유승민', '이재명']
+	keywords = ['문재인', '황교안', '안희정', '안철수', '유승민', '이재명']
 	# db에 저장된 모든 키워드 메모리로 가져옴 
 	keys = Keyword.objects.all()
+	# print keys
 	today = datetime.datetime.now()
 
 	URLS = []
@@ -76,7 +77,11 @@ def my_scheduled_job():
 	# DB 저장 
 	for key in keys:
 		# URL 리스트 생성 
-		url = createUrlQuery(key, today)
+		# unicode -> utf-8 -> string 
+		# print type(str(key.name.encode('utf-8'))) 
+		url = createUrlQuery(str(key.name.encode('utf-8')), today)
+		# url = createUrlQuery(key, today)
+		# print url 
 		URLS.append(url)
 
 		
@@ -87,29 +92,27 @@ def my_scheduled_job():
 	pool.join()
 
 	# print num_news_list
+	# print len(keys)
 
 	# DB 저장 
 	for i in range(len(keys)):
 		today_news = []
-		try:
-			key_model = Keyword.objects.get(name=keys[i])
-			print "model exists"
-			print key_model.name.encode('utf-8')
-			today_news.append(unicode(keys[i], 'utf-8'))
-			today_news.append(today.strftime("%Y-%m-%d"))
-			today_news.append(num_news_list[i])
-			# print unicode(keys[i], 'utf-8')
-			# print type(today.strftime("%Y-%m-%d"))
-			# print type(num_news_list[i])
-			# print today_news
+		# savekey = unicode(str(key.name.encode('utf-8')), 'utf-8')
+		print "model exists"
+		# print type(keys[i].name)
+		# print type(unicode(keywords[1], 'utf-8'))
+		today_news.append(keys[i].name) # save into unicode
+		today_news.append(today.strftime("%Y-%m-%d"))
+		today_news.append(num_news_list[i])
+		# print unicode(keys[i], 'utf-8')
+		# print type(today.strftime("%Y-%m-%d"))
+		# print type(num_news_list[i])
+		# print today_news
 
-			numOfNews = json.loads(key_model.numOfNews)
-			numOfNews.append(today_news)
+		numOfNews = json.loads(keys[i].numOfNews)
+		numOfNews.append(today_news)
 
-			# print numOfNews
-			key_model.numOfNews = json.dumps(numOfNews)
-			key_model.save(update_fields=['numOfNews'])
-			print "update completed !!"
-
-		except:
-			print "model does not exist"
+		# print numOfNews
+		keys[i].numOfNews = json.dumps(numOfNews)
+		keys[i].save(update_fields=['numOfNews'])
+		print "update completed !!"
