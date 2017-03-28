@@ -41,10 +41,10 @@
 	    </form>
 
 	    
-		<form action="{% url 'keyword_store' %}" method="post" enctype="multipart/form-data"> 
+	  <form action="{% url 'keyword_store' %}" method="post" enctype="multipart/form-data"> 
 	   	{% csrf_token %}
 		<div class="col-lg-6 col-lg-offset-3">
-		   <div class="input-group">
+		   <div class="input-group" style="float:left;width:94.8%;">
                 <label class="input-group-btn">
                     <span class="btn btn-primary">
                         Browse… <input type="file" name="file" id="file1" style="display: none;">
@@ -52,11 +52,11 @@
                 </label>
                 <input type="text" id="fname-1" class="form-control" readonly="">
             </div>
-		    <input type="submit" value="생성" />
+		    <input class="btn btn-default" type="submit" value="생성" />
          </div>
         </form> 
 
-		<div style="margin-top:7%;margin-bottom: 7%">
+	<div style="margin-top:7%;margin-bottom: 7%">
 	    <form action="{% url 'keyword_list' %}" method="POST">
 	        	{% csrf_token %}
 		  <div class="col-lg-6 col-lg-offset-3">
@@ -70,14 +70,14 @@
 		    </div>
 		  </div>
 	    </form>
-	    </div>
+	  </div>
 		
-	<div style="margin-top:7%;margin-bottom: 7%">
+	<div style="margin-top:15%;margin-bottom: 15%">
 	   <!-- 파일 입력  -->
 	   <form action="{% url 'download_to_csv' %}" method="post" enctype="multipart/form-data"> 
 	   	{% csrf_token %}
 		<div class="col-lg-6 col-lg-offset-3">
-		   <div class="input-group">
+		   <div class="input-group" style="float:left;width:94.5%;">
                 <label class="input-group-btn">
                     <span class="btn btn-primary">
                         Browse… <input type="file" name="file" id="file2" style="display: none;">
@@ -85,13 +85,14 @@
                 </label>
                 <input type="text" id="fname-2" class="form-control" readonly="">
             </div>
+            <input class="btn btn-default" type="submit" value="CSV" />
             <input type="date" class="form-control" name="start_date_search" placeholder="from">
 		    <input type="date" class="form-control" name="end_date_search" placeholder="to">
-		    <input type="submit" value="CSV" />
          </div>
         </form> 
 	</div>
-
+	
+	<div style="margin-top:15%;margin-bottom: 7%">
 	    <form action="{% url 'download_to_csv' %}" method="POST">
 	        	{% csrf_token %}
 		  <div class="col-lg-6 col-lg-offset-3">
@@ -107,11 +108,11 @@
 	    </form>
 	</div>
 
-	<div style="margin-top:2%;margin-bottom: 7%">
+	<div style="margin-top:27%;margin-bottom: 7%">
 	<form action="{% url 'keyword_delete' %}" method="post" enctype="multipart/form-data"> 
 	   	{% csrf_token %}
 		<div class="col-lg-6 col-lg-offset-3">
-		   <div class="input-group">
+		   <div class="input-group" style="float:left;width:94.7%;">
                 <label class="input-group-btn">
                     <span class="btn btn-primary">
                         Browse… <input type="file" name="file" id="file3" style="display: none;">
@@ -119,12 +120,13 @@
                 </label>
                 <input type="text" id="fname-3" class="form-control" readonly="">
             </div>
+            <input class="btn btn-default" type="submit" value="삭제" />
             <input type="date" class="form-control" name="start_date_search" placeholder="from">
 		    <input type="date" class="form-control" name="end_date_search" placeholder="to">
-		    <input type="submit" value="삭제" />
          </div>
      </form>
      </div>
+	</div>
 	{% block content %}
 	{% endblock %}
 </body>
