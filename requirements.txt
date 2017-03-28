@@ -2,6 +2,8 @@ Django==1.10.6
 beautifulsoup4==4.5.3
 django-crontab==0.7.1
 lxml==3.7.3
+mod-wsgi==4.5.15
+mod-wsgi-httpd==2.4.23.2
 numpy==1.12.1
 python-dateutil==2.6.0
 six==1.10.0
