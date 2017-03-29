@@ -6,4 +6,5 @@ urlpatterns = [
 	url(r'^store/$', views.store, name='keyword_store'),
 	url(r'^csv/$', views.csvWriter, name="download_to_csv"),
 	url(r'^delete/$', views.delete, name='keyword_delete'),
+	url(r'^show/$', views.show, name='keyword_show'),
 ]

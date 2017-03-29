@@ -126,6 +126,26 @@
          </div>
      </form>
      </div>
+
+
+     <div style="margin-top:35%;margin-bottom: 7%">
+	<form action="{% url 'keyword_show' %}" method="post" enctype="multipart/form-data"> 
+	   	{% csrf_token %}
+		<div class="col-lg-6 col-lg-offset-3">
+		   <div class="input-group" style="float:left;width:95%;">
+                <label class="input-group-btn">
+                    <span class="btn btn-primary">
+                        Browse… <input type="file" name="file" id="file4" style="display: none;">
+                    </span>
+                </label>
+                <input type="text" id="fname-4" class="form-control" readonly="">
+            </div>
+            <input class="btn btn-default" type="submit" value="JSON" />
+            <input type="date" class="form-control" name="start_date_search" placeholder="from">
+		    <input type="date" class="form-control" name="end_date_search" placeholder="to">
+         </div>
+     </form>
+     </div>
 	</div>
 	{% block content %}
 	{% endblock %}

@@ -410,4 +410,71 @@ def delete(request):
 	return HttpResponseRedirect("/")
 
 
+def show(request):
+	if request.method == 'POST':
+		# 파일 입력 
+		if 'file' in request.FILES:
+			selected_keywords = []
+			file = request.FILES['file']
+			print "-------------------"
+			# print request.charset
+			csvReader = csv.reader(file)
+
+			for k in csvReader:
+				# print k[1].decode('euc-kr') # file encoding에 따라 변경 (aws 에러남)
+				selected_keywords.append(k[1].decode('euc-kr'))
+			
+		# 직접 입력 
+		else:
+			selected_keywords = delete_spaces(request.POST['selected_keywords'])
+
+	if selected_keywords:
+		not_exist_keys = []
+		try:
+			start_date_search = datetime.datetime.strptime(request.POST['start_date_search'], "%Y-%m-%d")
+		except:
+			start_date_search = datetime.datetime.strptime('2012-03-02', "%Y-%m-%d")
+		try:
+			end_date_search = datetime.datetime.strptime(request.POST['end_date_search'], "%Y-%m-%d")
+		except:
+			end_date_search = datetime.datetime.now()
+
+		wanted_json = []
+
+		# DB 조회 
+		for i, selected_keyword in enumerate(selected_keywords):
+			try:
+				key_json = collections.OrderedDict()
+				key_model = Keyword.objects.get(name=selected_keyword)
+				if(key_model):
+					print type(key_model.name.encode('utf-8'))
+					print "model exist in DB"
+					key_json['id'] = key_model.id
+					key_json['name'] = key_model.name.encode('utf-8')
+					
+				
+				numOfNews = json.loads(key_model.numOfNews)
+				np_numOfNews = np.array(numOfNews) # list to np array
+				x = np_numOfNews[:, 0] # np array (keyword)
+				y = np_numOfNews[:, 1] # np array (date)
+				z = np_numOfNews[:, 2] # np array (number of news)
+
+				x_map = np.array(map(lambda p: p.encode('utf-8'), x)) # np array
+				y_map = np.array(map(lambda p: datetime.datetime.strptime(p, "%Y-%m-%d"), y)) # np array
+
+				condition = np.logical_and(y_map >=  start_date_search, y_map <= end_date_search)
+				result = np_numOfNews[condition] # 특정조건을 만족하는 행 제외 
+			
+				# print result.tolist()
+				key_json['history'] = result.tolist()
+				wanted_json.append(key_json) 
+
+			except:
+				print "model doesn't exist in DB"
+				not_exist_keys.append(selected_keyword)
+
+		# print wanted_json
+	return HttpResponse(json.dumps(wanted_json, indent=4))
+
+
 
