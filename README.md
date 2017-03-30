@@ -31,9 +31,9 @@ crontab error 발생시 /var/spool/mail/sylee 에 로그가 찍힌다. (sylee �
 ### 서비스 사용법
 
 * 파일형식 
-
-column[0]는 더미 데이터 
 ```
+column[0]는 더미 데이터이므로 임의 데이터를 넣어도 된다. 
+
 인코딩 : EUC-KR
 확장자 : CSV
 column[0] : 테마(도넛)명
