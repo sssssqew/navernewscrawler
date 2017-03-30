@@ -489,6 +489,7 @@ def show(request):
 					print "model exist in DB"
 					key_json['id'] = key_model.id
 					key_json['name'] = key_model.name.encode('utf-8')
+					key_json['donut'] = key_model.donut
 					
 				
 				numOfNews = json.loads(key_model.numOfNews)
