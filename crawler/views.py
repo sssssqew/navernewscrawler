@@ -44,6 +44,16 @@ def createDaysForYear(term):
 
 	return days
 
+# 날짜 생성 
+def createDaysForPeriod(s_year, s_month, s_day, e_year, e_month, e_day):
+	days = []
+	d = datetime.date(s_year, s_month, s_day)
+	while(d.year != e_year or d.month != e_month or d.day != e_day):
+		days.append(d)
+		d = d + datetime.timedelta(days=1)
+	# print days 
+	return days
+
 # URL 쿼리 생성 
 def createUrlQuery(keword, day):
 	front_date = day.strftime('%Y.%m.%d') # URL 앞부분 날짜 포맷
@@ -210,8 +220,33 @@ def store(request):
 			keywords = request.POST['keywords']
 			keys = delete_spaces(keywords)
 
-	# 수집할 검색어 및 날짜 배열 만들기 
-	days = createDaysForYear(TERM)
+	# 수집할 검색어 및 날짜 배열 만들기 (기간으로 수정함)
+	if keys:
+		if request.POST['start_date_search']:
+			start_date_search = request.POST['start_date_search'].encode('utf-8')
+		else:
+			start_date_search = '2017-03-01'
+		if request.POST['end_date_search']:
+			end_date_search = request.POST['end_date_search'].encode('utf-8')
+		else:
+			end_date_search = datetime.datetime.now().strftime('%Y-%m-%d')
+
+	# print request.POST['start_date_search'].encode('utf-8')
+	# days = createDaysForYear(TERM)
+	# print start_date_search
+	# print end_date_search
+
+	start_date_arr = start_date_search.split('-')
+	START_YEAR = int(start_date_arr[0])
+	START_MONTH = int(start_date_arr[1])
+	START_DAY = int(start_date_arr[2])
+
+	end_date_arr = end_date_search.split('-')
+	END_YEAR = int(end_date_arr[0])
+	END_MONTH = int(end_date_arr[1])
+	END_DAY = int(end_date_arr[2])
+
+	days = createDaysForPeriod(START_YEAR, START_MONTH, START_DAY, END_YEAR, END_MONTH, END_DAY)
 	print days 
 	
 	# DB 저장 

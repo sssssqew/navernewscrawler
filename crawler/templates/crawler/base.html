@@ -53,10 +53,12 @@
                 <input type="text" id="fname-1" class="form-control" readonly="">
             </div>
 		    <input class="btn btn-default" type="submit" value="생성" />
+		    <input type="date" class="form-control" name="start_date_search" placeholder="from">
+		    <input type="date" class="form-control" name="end_date_search" placeholder="to">
          </div>
         </form> 
 
-	<div style="margin-top:7%;margin-bottom: 7%">
+	<div style="margin-top:8%;margin-bottom: 7%">
 	    <form action="{% url 'keyword_list' %}" method="POST">
 	        	{% csrf_token %}
 		  <div class="col-lg-6 col-lg-offset-3">
