@@ -205,6 +205,7 @@ def store(request):
 	if request.method == 'POST':
 		# 파일 입력 
 		if 'file' in request.FILES:
+			donuts = []
 			keywords = []
 			file = request.FILES['file']
 			print "-------------------"
@@ -213,6 +214,7 @@ def store(request):
 
 			for k in csvReader:
 				# print k[1].decode('euc-kr') # file encoding에 따라 변경 (aws 에러남)
+				donuts.append(k[0].decode('euc-kr'))
 				keywords.append(k[1].decode('euc-kr'))
 			keys = keywords
 		# 직접 입력 
@@ -250,7 +252,7 @@ def store(request):
 	print days 
 	
 	# DB 저장 
-	for key in keys:
+	for idx, key in enumerate(keys):
 		try:
 			key_model = Keyword.objects.get(name=key)
 			# print ("\n" + key + '  is already exists in database !!') (aws에서 완전히 삭제해야 동작함)
@@ -286,6 +288,7 @@ def store(request):
 			# 결과 저장 
 			key_model = Keyword(
 				name=key, 
+				donut = donuts[idx],
 				numOfNews=json.dumps(record_data[key])
 			)
 			key_model.publish()
