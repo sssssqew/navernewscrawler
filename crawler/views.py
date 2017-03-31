@@ -212,7 +212,7 @@ def index(request):
 # 검색 페이지 
 def store(request):
 
-	is_saved = 0
+	# is_saved = 0
 	start_time = timeit.default_timer()
 
 	if request.method == 'POST':
