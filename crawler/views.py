@@ -86,7 +86,7 @@ def getNumberOfNews(query):
 		headers = { 'User-Agent' : user_agent }
 		r = urllib2.Request(query, headers=headers)
 		URL_source_FOR_DATE = urllib2.urlopen(r)
-		if(URL_source_FOR_DATE): logging.info("url query success !!")
+		logging.info("url query success !!")
 	except Exception as e:
 		logging.error(e)
 		pass
