@@ -17,6 +17,7 @@ import multiprocessing
 import timeit
 import csv
 import collections
+import logging
 
 # 데이터 수집기간 설정 
 # TERM = 1 # 어제 하루치 데이터 
@@ -30,6 +31,14 @@ TARGET_URL_REST = '%2Ca%3Aall&mynews=0&mson=0&refresh_start=0&related=0'
 
 is_saved = 0
 is_deleted = 0
+
+# 로깅 모듈 설정
+logging.basicConfig(
+	filename = ("%s.log" % (datetime.datetime.now().strftime("%Y%m%d%H%M%S%f"))),
+	filemode = "a",
+	format = "%(levelname)-10s %(asctime)s %(message)s",
+	level = logging.DEBUG
+)
 
 # 검색할 기간의 날짜 생성  
 def createDaysForYear(term):
@@ -77,7 +86,9 @@ def getNumberOfNews(query):
 		headers = { 'User-Agent' : user_agent }
 		r = urllib2.Request(query, headers=headers)
 		URL_source_FOR_DATE = urllib2.urlopen(r)
+		if(URL_source_FOR_DATE): logging.info("url query success !!")
 	except Exception as e:
+		logging.error(e)
 		pass
 
 	soup = BeautifulSoup(URL_source_FOR_DATE, 'lxml', from_encoding='utf-8')
@@ -94,6 +105,7 @@ def getNumberOfNews(query):
 
 def get_content(url):
 	print "searching..."
+	logging.info("searching...")
 	num_news = getNumberOfNews(url)
 	return num_news
 
@@ -112,6 +124,7 @@ def index(request):
 	# json loads: list
 	print "--------------------------------------"
 	print "rendering start..."
+	logging.info("rendering start...")
 
 	isExist = False
 	is_saved_alarm = 0
@@ -302,6 +315,7 @@ def store(request):
 	print "------------------------------------------------------------------"
 	print "실행시간(s): " + str(round(elapsed , 3)) + ' s'
 	print "실행시간(min) : " + str(round(elapsed / 60 , 3)) + ' min'
+	logging.info("실행시간(min) : " + str(round(elapsed / 60 , 3)) + ' min')
 
 	return HttpResponseRedirect("/")
 
