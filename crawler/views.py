@@ -89,7 +89,8 @@ def getNumberOfNews(query):
 		logging.info("url query success !!")
 	except Exception as e:
 		logging.error(e)
-		pass
+		return 0
+		# pass
 
 	soup = BeautifulSoup(URL_source_FOR_DATE, 'lxml', from_encoding='utf-8')
 
