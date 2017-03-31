@@ -86,22 +86,24 @@ def getNumberOfNews(query):
 		headers = { 'User-Agent' : user_agent }
 		r = urllib2.Request(query, headers=headers)
 		URL_source_FOR_DATE = urllib2.urlopen(r)
-		if(URL_source_FOR_DATE): logging.info("url query success !!")
+
 	except Exception as e:
 		logging.error(e)
 		pass
 
-	soup = BeautifulSoup(URL_source_FOR_DATE, 'lxml', from_encoding='utf-8')
+	if(URL_source_FOR_DATE): 
+		logging.info("url query success !!")
+		soup = BeautifulSoup(URL_source_FOR_DATE, 'lxml', from_encoding='utf-8')
 
-	# 기사 없음 
-	if not soup.find('div', 'title_desc all_my'):
+		# 기사 없음 
+		if not soup.find('div', 'title_desc all_my'):
+			URL_source_FOR_DATE.close()
+			return 0
+
+		news_num_for_day = soup.find('div', 'title_desc all_my').select('span')[0].text.split('/')
+		news_num_for_day_int = int(filter(lambda x: x.isdigit(), news_num_for_day[1])) # 숫자 추출 
 		URL_source_FOR_DATE.close()
-		return 0
-
-	news_num_for_day = soup.find('div', 'title_desc all_my').select('span')[0].text.split('/')
-	news_num_for_day_int = int(filter(lambda x: x.isdigit(), news_num_for_day[1])) # 숫자 추출 
-	URL_source_FOR_DATE.close()
-	return  news_num_for_day_int
+		return  news_num_for_day_int
 
 def get_content(url):
 	print "searching..."
