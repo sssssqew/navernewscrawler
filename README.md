@@ -22,9 +22,10 @@
 * [http://ggilrong.tistory.com/entry/Django-Apache-%EC%89%AC%EC%9A%B4-%EC%97%B0%EB%8F%99%EB%B0%A9%EB%B2%95-How-to-use-Django-with-Apache-and-modwsgi](Link URL)
 * [http://stackoverflow.com/questions/24760872/how-can-run-django-on-centos-using-wsgi](Link URL)
 
-### 자동화(crontab) 에러처리 
+### 에러처리 
 
 ```
+/tmp/mod_wsgi-localhost:8000:1012/error_log
 crontab error 발생시 /var/spool/mail/sylee 에 로그가 찍힌다. (sylee 파일은 다른 이름으로 변경가능)
 ```
 
