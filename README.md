@@ -13,18 +13,21 @@
 -> python manage.py runmodwsgi --setup-only --user sylee --group sylee --server-root=/tmp/mod_wsgi-localhost:8000:1012
 6. 아파치 실행 또는 재실행하기 
 -> /tmp/mod_wsgi-localhost:8000:1012/apachectl start(restart)
+
+* 아파치 설정파일 변경 : /tmp/mod_wsgi-localhost:8000:1012/httpd.conf
 ...
 ```
 
-### 참고 사이트 
+### 서버셋팅시 참고 사이트 
 
 * [https://github.com/GrahamDumpleton/mod_wsgi](Link URL)
 * [http://ggilrong.tistory.com/entry/Django-Apache-%EC%89%AC%EC%9A%B4-%EC%97%B0%EB%8F%99%EB%B0%A9%EB%B2%95-How-to-use-Django-with-Apache-and-modwsgi](Link URL)
 * [http://stackoverflow.com/questions/24760872/how-can-run-django-on-centos-using-wsgi](Link URL)
 
-### 자동화(crontab) 에러처리 
+### 에러처리 
 
 ```
+/tmp/mod_wsgi-localhost:8000:1012/error_log
 crontab error 발생시 /var/spool/mail/sylee 에 로그가 찍힌다. (sylee 파일은 다른 이름으로 변경가능)
 ```
 
@@ -32,8 +35,6 @@ crontab error 발생시 /var/spool/mail/sylee 에 로그가 찍힌다. (sylee �
 ### 서비스 사용법
 ```
 * 파일형식 
-
-column[0]는 더미 데이터이므로 임의 데이터를 넣어도 된다. 
 
 인코딩 : EUC-KR
 확장자 : CSV
@@ -50,4 +51,13 @@ column[1] : 데이터 추출을 위한 연관검색어
 
 시작날짜 : 디폴트 값
 끝날짜 : 어제 날짜 
+```
+
+### 몰트 위스키 서버 환경설정 
+
+* timeout, process, thread, buffer size 
+```
+* multiprocess인 경우
+
+* multiprocess가 아닌 경우
 ```
