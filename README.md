@@ -18,7 +18,7 @@
 ...
 ```
 
-### 참고 사이트 
+### 서버셋팅시 참고 사이트 
 
 * [https://github.com/GrahamDumpleton/mod_wsgi](Link URL)
 * [http://ggilrong.tistory.com/entry/Django-Apache-%EC%89%AC%EC%9A%B4-%EC%97%B0%EB%8F%99%EB%B0%A9%EB%B2%95-How-to-use-Django-with-Apache-and-modwsgi](Link URL)
@@ -51,4 +51,13 @@ column[1] : 데이터 추출을 위한 연관검색어
 
 시작날짜 : 디폴트 값
 끝날짜 : 어제 날짜 
+```
+
+### 몰트 위스키 서버 환경설정 
+
+* timeout, process, thread, buffer size 
+```
+* multiprocess인 경우
+
+* multiprocess가 아닌 경우
 ```
