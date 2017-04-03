@@ -31,6 +31,7 @@ TARGET_URL_REST = '%2Ca%3Aall&mynews=0&mson=0&refresh_start=0&related=0'
 
 is_saved = 0
 is_deleted = 0
+is_updated = 0
 
 # 로깅 모듈 설정
 logging.basicConfig(
@@ -121,6 +122,7 @@ def delete_spaces(words):
 def index(request):
 	global is_saved
 	global is_deleted
+	global is_updated
 	# json dums : string
 	# json loads: list
 	print "--------------------------------------"
@@ -130,6 +132,7 @@ def index(request):
 	isExist = False
 	is_saved_alarm = 0
 	is_deleted_alarm = 0
+	is_updated_alarm = 0
 
 	selected_keywords = []
 	context = {}
@@ -142,6 +145,10 @@ def index(request):
 	if is_deleted:
 		is_deleted_alarm = 1
 		is_deleted = 0
+
+	if is_updated:
+		is_updated_alarm = 1
+		is_updated = 0
 
 	if request.method == 'POST':
 		selected_keywords = delete_spaces(request.POST['selected_keywords'])
@@ -205,7 +212,9 @@ def index(request):
 			context = {"is_saved_alarm":is_saved_alarm, "isExistData":isExist}
 		elif is_deleted_alarm :
 			context = {"is_deleted_alarm":is_deleted_alarm, "isExistData":isExist}
-
+		elif is_updated_alarm:
+			context = {"is_updated_alarm":is_updated_alarm, "isExistData":isExist}
+			
 
 	return render(request, 'crawler/search.html', context)
 
@@ -531,4 +540,112 @@ def show(request):
 	return HttpResponse(json.dumps(wanted_json, indent=4))
 
 
+# 선택한 기간에 대한 크롤링 데이터를 추가하고 동시에 도넛명도 변경함 
+def update(request):
+	if request.method == 'POST':
+		# 파일 입력 
+		if 'file' in request.FILES:
+			donuts = []
+			keywords = []
+			file = request.FILES['file']
+			print "-------------------"
+			# print request.charset
+			csvReader = csv.reader(file)
 
+			for k in csvReader:
+				# print k[1].decode('euc-kr') # file encoding에 따라 변경 (aws 에러남)
+				donuts.append(k[0].decode('euc-kr'))
+				keywords.append(k[1].decode('euc-kr'))
+			keys = keywords
+		# 직접 입력 
+		else:
+			keywords = request.POST['keywords']
+			keys = delete_spaces(keywords)
+
+
+	if not request.POST.get("Donut_Only"):
+		print "* saved donut name and keyword *"
+		
+		# 수집할 검색어 및 날짜 배열 만들기 (기간으로 수정함)
+		if keys:
+			if request.POST['start_date_search']:
+				start_date_search = request.POST['start_date_search'].encode('utf-8')
+			else:
+				start_date_search = '2017-03-01'
+			if request.POST['end_date_search']:
+				end_date_search = request.POST['end_date_search'].encode('utf-8')
+			else:
+				end_date_search = datetime.datetime.now().strftime('%Y-%m-%d')
+
+
+		start_date_arr = start_date_search.split('-')
+		START_YEAR = int(start_date_arr[0])
+		START_MONTH = int(start_date_arr[1])
+		START_DAY = int(start_date_arr[2])
+
+		end_date_arr = end_date_search.split('-')
+		END_YEAR = int(end_date_arr[0])
+		END_MONTH = int(end_date_arr[1])
+		END_DAY = int(end_date_arr[2])
+
+		days = createDaysForPeriod(START_YEAR, START_MONTH, START_DAY, END_YEAR, END_MONTH, END_DAY)
+		print days 
+
+		# DB 조회 
+		for idx, key in enumerate(keys):
+			try:
+				key_model = Keyword.objects.get(name=key)
+				if(key_model):
+					print "model exist in DB"
+					numOfNews = json.loads(key_model.numOfNews)
+					# print key_model.name (aws에서 완전히 삭제해야 동작함)
+
+				# record_data = collections.OrderedDict()
+				URLS = []
+
+				# URL 리스트 생성 
+				for day in days:
+					url = createUrlQuery(key, day)
+					URLS.append(url)
+
+				# 데이터 수집 
+				pool = multiprocessing.Pool(processes=64)  
+				num_news_list = pool.map(get_content, URLS) 
+				pool.close()  
+				pool.join()   
+
+				# record_data[key] = []
+				for i in range(len(days)):
+					row = []
+					row.append(key)
+					row.append(days[i].strftime("%Y-%m-%d"))
+					row.append(num_news_list[i])
+					numOfNews.append(row)
+
+				# 업데이트 
+				key_model.numOfNews = json.dumps(numOfNews)
+				key_model.donut = donuts[idx]
+				key_model.save(update_fields=['donut','numOfNews'])
+				global is_updated
+				is_updated = 1
+
+			except:
+				print "model doesn't exist in DB"
+				not_exist_keys.append(selected_keyword)
+	else:
+		# DB 조회 
+		for idx, key in enumerate(keys):
+			try:
+				key_model = Keyword.objects.get(name=key)
+				if(key_model):
+					print "model exist in DB"
+				key_model.donut = donuts[idx]
+				key_model.save(update_fields=['donut'])
+				global is_updated
+				is_updated = 1
+			except:
+				print "model doesn't exist in DB"
+
+		print "* saved donut name only *"
+
+	return HttpResponseRedirect("/")

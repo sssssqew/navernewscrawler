@@ -22,6 +22,16 @@
     </div>
 </div>
 {% endif %}
+{% if is_updated_alarm %}
+<div class="row" style="margin-top: 2%">   
+    <div class="col-lg-6 col-lg-offset-3">
+        <div class="alert alert-success alert-dismissible" role="alert">
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <strong>성공!</strong> 원하는 키워드에서 특정 날짜의 데이터가 DB에서 업데이트 되었습니다.
+        </div>
+    </div>
+</div>
+{% endif %}
 {% if not_keys  %}
 <div class="row" style="margin-top: 2%">   
     <div class="col-lg-6 col-lg-offset-3">
@@ -133,6 +143,19 @@
           input.trigger('fileselect', [numFiles, label]);
           console.log('label');
           $('#fname-4').val(label);
+      });
+      $('#file5').on('fileselect', function(event, numFiles, label) {
+          console.log(numFiles);
+          console.log(label);
+      });
+      // show file name 
+      $(document).on('change', '#file5', function() {
+          var input = $(this),
+              numFiles = input.get(0).files ? input.get(0).files.length : 1,
+              label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+          input.trigger('fileselect', [numFiles, label]);
+          console.log('label');
+          $('#fname-5').val(label);
       });
     });
 

@@ -94,7 +94,7 @@
         </form> 
 	</div>
 	
-	<div style="margin-top:15%;margin-bottom: 7%">
+	<div style="margin-top:20%;margin-bottom: 7%">
 	    <form action="{% url 'download_to_csv' %}" method="POST">
 	        	{% csrf_token %}
 		  <div class="col-lg-6 col-lg-offset-3">
@@ -148,6 +148,29 @@
          </div>
      </form>
      </div>
+
+     <div style="margin-top:45%;margin-bottom: 15%">
+	   <!-- 파일 입력  -->
+	   <form action="{% url 'keyword_update' %}" method="post" enctype="multipart/form-data"> 
+	   	{% csrf_token %}
+		<div class="col-lg-6 col-lg-offset-3">
+		   <div class="input-group" style="float:left;width:85%;">
+                <label class="input-group-btn">
+                    <span class="btn btn-primary">
+                        Browse… <input type="file" name="file" id="file5" style="display: none;">
+                    </span>
+                </label>
+                <input type="text" id="fname-5" class="form-control" readonly="">
+            </div>
+
+        	   
+            <input class="btn btn-default" type="submit" value="업데이트" style="margin-right:1%;"/>
+            <input type="checkbox" name="Donut_Only" value="Donut Only" aria-label="..."> Donut Only
+            <input type="date" class="form-control" name="start_date_search" placeholder="from">
+		    <input type="date" class="form-control" name="end_date_search" placeholder="to">
+         </div>
+        </form> 
+	</div>
 	</div>
 	{% block content %}
 	{% endblock %}
