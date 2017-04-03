@@ -13,6 +13,8 @@
 -> python manage.py runmodwsgi --setup-only --user sylee --group sylee --server-root=/tmp/mod_wsgi-localhost:8000:1012
 6. 아파치 실행 또는 재실행하기 
 -> /tmp/mod_wsgi-localhost:8000:1012/apachectl start(restart)
+
+* 아파치 설정파일 변경 : /tmp/mod_wsgi-localhost:8000:1012/httpd.conf
 ...
 ```
 
