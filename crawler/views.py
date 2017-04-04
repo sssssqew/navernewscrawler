@@ -557,6 +557,7 @@ def update(request):
 	if request.method == 'POST':
 		# 파일 입력 
 		if 'file' in request.FILES:
+			categories = []
 			donuts = []
 			keywords = []
 			file = request.FILES['file']
@@ -565,9 +566,9 @@ def update(request):
 			csvReader = csv.reader(file)
 
 			for k in csvReader:
-				# print k[1].decode('euc-kr') # file encoding에 따라 변경 (aws 에러남)
-				donuts.append(k[0].decode('euc-kr'))
-				keywords.append(k[1].decode('euc-kr'))
+				categories.append(k[0].decode('euc-kr'))
+				donuts.append(k[1].decode('euc-kr'))
+				keywords.append(k[2].decode('euc-kr'))
 			keys = keywords
 		# 직접 입력 
 		else:
@@ -575,9 +576,38 @@ def update(request):
 			keys = delete_spaces(keywords)
 
 
-	if not request.POST.get("Donut_Only"):
-		print "* saved donut name and keyword *"
-		
+	if request.POST.get("Category_Only"):
+		# DB 조회 
+		for idx, key in enumerate(keys):
+			try:
+				key_model = Keyword.objects.get(name=key)
+				if(key_model):
+					print "model exist in DB"
+				key_model.category = categories[idx]
+				key_model.save(update_fields=['category'])
+				global is_updated
+				is_updated = 1
+			except:
+				print "model doesn't exist in DB"
+
+		print "* saved category only *"
+
+	elif request.POST.get("Donut_Only"):
+		# DB 조회 
+		for idx, key in enumerate(keys):
+			try:
+				key_model = Keyword.objects.get(name=key)
+				if(key_model):
+					print "model exist in DB"
+				key_model.donut = donuts[idx]
+				key_model.save(update_fields=['donut'])
+				global is_updated
+				is_updated = 1
+			except:
+				print "model doesn't exist in DB"
+
+		print "* saved donut name only *"
+	else:	
 		# 수집할 검색어 및 날짜 배열 만들기 (기간으로 수정함)
 		if keys:
 			if request.POST['start_date_search']:
@@ -601,7 +631,7 @@ def update(request):
 		END_DAY = int(end_date_arr[2])
 
 		days = createDaysForPeriod(START_YEAR, START_MONTH, START_DAY, END_YEAR, END_MONTH, END_DAY)
-		print days 
+		# print days 
 
 		# DB 조회 
 		for idx, key in enumerate(keys):
@@ -638,27 +668,15 @@ def update(request):
 				# 업데이트 
 				key_model.numOfNews = json.dumps(numOfNews)
 				key_model.donut = donuts[idx]
-				key_model.save(update_fields=['donut','numOfNews'])
+				key_model.category = categories[idx]
+				key_model.save(update_fields=['category', 'donut','numOfNews'])
 				global is_updated
 				is_updated = 1
 
 			except:
 				print "model doesn't exist in DB"
 				not_exist_keys.append(selected_keyword)
-	else:
-		# DB 조회 
-		for idx, key in enumerate(keys):
-			try:
-				key_model = Keyword.objects.get(name=key)
-				if(key_model):
-					print "model exist in DB"
-				key_model.donut = donuts[idx]
-				key_model.save(update_fields=['donut'])
-				global is_updated
-				is_updated = 1
-			except:
-				print "model doesn't exist in DB"
 
-		print "* saved donut name only *"
+		print "* saved donut, category and keyword *"
 
 	return HttpResponseRedirect("/")
