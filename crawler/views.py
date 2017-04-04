@@ -114,8 +114,6 @@ def get_content(url):
 	print "searching..."
 	logging.info("searching...")
 	num_news = getNumberOfNews(url)
-	# logging.info(str(num_news))
-	# time.sleep(0.5)
 	return num_news
 
 def delete_spaces(words):
@@ -235,6 +233,7 @@ def store(request):
 	if request.method == 'POST':
 		# 파일 입력 
 		if 'file' in request.FILES:
+			categories = []
 			donuts = []
 			keywords = []
 			file = request.FILES['file']
@@ -243,9 +242,9 @@ def store(request):
 			csvReader = csv.reader(file)
 
 			for k in csvReader:
-				# print k[1].decode('euc-kr') # file encoding에 따라 변경 (aws 에러남)
-				donuts.append(k[0].decode('euc-kr'))
-				keywords.append(k[1].decode('euc-kr'))
+				categories.append(k[0].decode('euc-kr'))
+				donuts.append(k[1].decode('euc-kr'))
+				keywords.append(k[2].decode('euc-kr'))
 			keys = keywords
 		# 직접 입력 
 		else:
@@ -302,8 +301,6 @@ def store(request):
 			time.sleep(2)
 			num_news_list = pool.map(get_content, URLS) 
 			pool.close() 
-			#pool.terminate()
-			
 			pool.join()   
 		
 
@@ -313,16 +310,13 @@ def store(request):
 				row.append(key)
 				row.append(days[i].strftime("%Y-%m-%d"))
 				row.append(num_news_list[i])
-				# print type(key)
-				# print type(days[i].strftime("%Y-%m-%d"))
-				# print type(num_news_list[i])
 				record_data[key].append(row)
 
-			# record_data[key].insert(0, key)
 
 			# 결과 저장 
 			key_model = Keyword(
 				name=key, 
+				category = categories[idx],
 				donut = donuts[idx],
 				numOfNews=json.dumps(record_data[key])
 			)
@@ -361,7 +355,7 @@ def csvWriter(request):
 
 			for k in csvReader:
 				# print k[1].decode('euc-kr') # file encoding에 따라 변경 (aws 에러남)
-				selected_keywords.append(k[1].decode('euc-kr'))
+				selected_keywords.append(k[2].decode('euc-kr'))
 			
 		# 직접 입력 
 		else:
@@ -433,7 +427,7 @@ def delete(request):
 
 			for k in csvReader:
 				# print k[1].decode('euc-kr') # file encoding에 따라 변경 (aws 에러남)
-				selected_keywords.append(k[1].decode('euc-kr'))
+				selected_keywords.append(k[2].decode('euc-kr'))
 			
 		# 직접 입력 
 		else:
