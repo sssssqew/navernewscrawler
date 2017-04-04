@@ -91,7 +91,7 @@ def getNumberOfNews(query):
 		# logging.info("url query success !!")
 	except Exception as e:
 		logging.error(e)
-		# URL_source_FOR_DATE.close()
+		URL_source_FOR_DATE.close()
 		print e
 		return 0
 		# pass
@@ -298,12 +298,8 @@ def store(request):
 				URLS.append(url)
 
 			# 데이터 수집 
-
-  
-
-
-			pool = multiprocessing.Pool(processes=64)  
-
+			pool = multiprocessing.Pool(processes=5)  
+			time.sleep(2)
 			num_news_list = pool.map(get_content, URLS) 
 			pool.close() 
 			#pool.terminate()
