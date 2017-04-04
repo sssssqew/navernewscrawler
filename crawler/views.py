@@ -18,6 +18,7 @@ import timeit
 import csv
 import collections
 import logging
+import time
 
 # 데이터 수집기간 설정 
 # TERM = 1 # 어제 하루치 데이터 
@@ -87,9 +88,11 @@ def getNumberOfNews(query):
 		headers = { 'User-Agent' : user_agent }
 		r = urllib2.Request(query, headers=headers)
 		URL_source_FOR_DATE = urllib2.urlopen(r)
-		logging.info("url query success !!")
+		# logging.info("url query success !!")
 	except Exception as e:
 		logging.error(e)
+		# URL_source_FOR_DATE.close()
+		print e
 		return 0
 		# pass
 
@@ -98,6 +101,8 @@ def getNumberOfNews(query):
 	# 기사 없음 
 	if not soup.find('div', 'title_desc all_my'):
 		URL_source_FOR_DATE.close()
+		logging.info("no news found")
+		print "no news found"
 		return 0
 
 	news_num_for_day = soup.find('div', 'title_desc all_my').select('span')[0].text.split('/')
@@ -109,6 +114,8 @@ def get_content(url):
 	print "searching..."
 	logging.info("searching...")
 	num_news = getNumberOfNews(url)
+	# logging.info(str(num_news))
+	# time.sleep(0.5)
 	return num_news
 
 def delete_spaces(words):
@@ -127,7 +134,7 @@ def index(request):
 	# json loads: list
 	print "--------------------------------------"
 	print "rendering start..."
-	logging.info("rendering start...")
+	# logging.info("rendering start...")
 
 	isExist = False
 	is_saved_alarm = 0
@@ -272,10 +279,11 @@ def store(request):
 	END_DAY = int(end_date_arr[2])
 
 	days = createDaysForPeriod(START_YEAR, START_MONTH, START_DAY, END_YEAR, END_MONTH, END_DAY)
-	print days 
+	# print days 
 	
 	# DB 저장 
 	for idx, key in enumerate(keys):
+		print str(key.encode('utf-8'))
 		try:
 			key_model = Keyword.objects.get(name=key)
 			# print ("\n" + key + '  is already exists in database !!') (aws에서 완전히 삭제해야 동작함)
@@ -290,10 +298,18 @@ def store(request):
 				URLS.append(url)
 
 			# 데이터 수집 
+
+  
+
+
 			pool = multiprocessing.Pool(processes=64)  
+
 			num_news_list = pool.map(get_content, URLS) 
-			pool.close()  
+			pool.close() 
+			#pool.terminate()
+			
 			pool.join()   
+		
 
 			record_data[key] = []
 			for i in range(len(days)):
@@ -325,7 +341,7 @@ def store(request):
 	print "------------------------------------------------------------------"
 	print "실행시간(s): " + str(round(elapsed , 3)) + ' s'
 	print "실행시간(min) : " + str(round(elapsed / 60 , 3)) + ' min'
-	logging.info("실행시간(s): " + str(round(elapsed , 3)) + ' s')
+	# logging.info("실행시간(s): " + str(round(elapsed , 3)) + ' s')
 
 	return HttpResponseRedirect("/")
 
