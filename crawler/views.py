@@ -20,6 +20,8 @@ import collections
 import logging
 import time
 
+from httplib import IncompleteRead
+
 # 데이터 수집기간 설정 
 # TERM = 1 # 어제 하루치 데이터 
 TERM = 5
@@ -135,25 +137,25 @@ def index(request):
 	# logging.info("rendering start...")
 
 	isExist = False
-	is_saved_alarm = 0
-	is_deleted_alarm = 0
-	is_updated_alarm = 0
+	# is_saved_alarm = 0
+	# is_deleted_alarm = 0
+	# is_updated_alarm = 0
 
 	selected_keywords = []
 	context = {}
 
 	# DB 저장 체크 
-	if is_saved:
-		is_saved_alarm = 1
-		is_saved = 0
+	# if is_saved:
+	# 	is_saved_alarm = 1
+	# 	is_saved = 0
 
-	if is_deleted:
-		is_deleted_alarm = 1
-		is_deleted = 0
+	# if is_deleted:
+	# 	is_deleted_alarm = 1
+	# 	is_deleted = 0
 
-	if is_updated:
-		is_updated_alarm = 1
-		is_updated = 0
+	# if is_updated:
+	# 	is_updated_alarm = 1
+	# 	is_updated = 0
 
 	if request.method == 'POST':
 		selected_keywords = delete_spaces(request.POST['selected_keywords'])
@@ -192,16 +194,12 @@ def index(request):
 				date = y[np.where(condition)].tolist()
 				data = z[np.where(condition)].tolist()
 
-				# print type(date)
 				date.insert(0, 'x')
 				data.insert(0, selected_keyword)
 
 				columns.append(data) 
 				columns.insert(0, date)
 
-				# print columns
-
-				# columns.append(json.loads(key_model.numOfNews))
 			except:
 				print "model doesn't exist in DB"
 				not_exist_keys.append(selected_keyword)
@@ -213,12 +211,15 @@ def index(request):
 		else:
 			context = {"not_keys":not_exist_keys, "isExistData":isExist}
 	else:
-		if is_saved_alarm:
-			context = {"is_saved_alarm":is_saved_alarm, "isExistData":isExist}
-		elif is_deleted_alarm :
-			context = {"is_deleted_alarm":is_deleted_alarm, "isExistData":isExist}
-		elif is_updated_alarm:
-			context = {"is_updated_alarm":is_updated_alarm, "isExistData":isExist}
+		if is_saved:
+			context = {"is_saved":is_saved, "isExistData":isExist}
+			is_saved = 0
+		elif is_deleted :
+			context = {"is_deleted":is_deleted, "isExistData":isExist}
+			is_deleted = 0
+		elif is_updated:
+			context = {"is_updated":is_updated, "isExistData":isExist}
+			is_updated = 0
 			
 
 	return render(request, 'crawler/search.html', context)
@@ -262,10 +263,6 @@ def store(request):
 		else:
 			end_date_search = datetime.datetime.now().strftime('%Y-%m-%d')
 
-	# print request.POST['start_date_search'].encode('utf-8')
-	# days = createDaysForYear(TERM)
-	# print start_date_search
-	# print end_date_search
 
 	start_date_arr = start_date_search.split('-')
 	START_YEAR = int(start_date_arr[0])

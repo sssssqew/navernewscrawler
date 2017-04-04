@@ -2,7 +2,7 @@
 
 {% block content %}
 
-{% if is_saved_alarm %}
+{% if is_saved %}
 <div class="row" style="margin-top: 2%">   
     <div class="col-lg-6 col-lg-offset-3">
         <div class="alert alert-success alert-dismissible" role="alert">
@@ -12,7 +12,7 @@
     </div>
 </div>
 {% endif %}
-{% if is_deleted_alarm %}
+{% if is_deleted %}
 <div class="row" style="margin-top: 2%">   
     <div class="col-lg-6 col-lg-offset-3">
         <div class="alert alert-success alert-dismissible" role="alert">
@@ -22,7 +22,7 @@
     </div>
 </div>
 {% endif %}
-{% if is_updated_alarm %}
+{% if is_updated %}
 <div class="row" style="margin-top: 2%">   
     <div class="col-lg-6 col-lg-offset-3">
         <div class="alert alert-success alert-dismissible" role="alert">
