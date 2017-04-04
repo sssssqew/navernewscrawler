@@ -496,7 +496,7 @@ def show(request):
 
 			for k in csvReader:
 				# print k[1].decode('euc-kr') # file encoding에 따라 변경 (aws 에러남)
-				selected_keywords.append(k[1].decode('euc-kr'))
+				selected_keywords.append(k[2].decode('euc-kr'))
 			
 		# 직접 입력 
 		else:
@@ -525,7 +525,9 @@ def show(request):
 					print "model exist in DB"
 					key_json['id'] = key_model.id
 					key_json['name'] = key_model.name.encode('utf-8')
+					key_json['category'] = key_model.category
 					key_json['donut'] = key_model.donut
+
 					
 				
 				numOfNews = json.loads(key_model.numOfNews)
