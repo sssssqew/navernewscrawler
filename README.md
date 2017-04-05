@@ -55,11 +55,11 @@ column[1] : 데이터 추출을 위한 연관검색어
 ```
 
 ### 몰트 위스키 서버 환경설정 
-
-* timeout, process, thread, buffer size 
 ```
+* timeout, process, thread, buffer size 
 * multiprocess인 경우
-
 * multiprocess가 아닌 경우
 ```
 ![선택 영역_006.png](https://bitbucket.org/repo/baqqb6g/images/1182112754-%EC%84%A0%ED%83%9D%20%EC%98%81%EC%97%AD_006.png)
+![선택 영역_007.png](https://bitbucket.org/repo/baqqb6g/images/1590090003-%EC%84%A0%ED%83%9D%20%EC%98%81%EC%97%AD_007.png)
+![선택 영역_008.png](https://bitbucket.org/repo/baqqb6g/images/2148294297-%EC%84%A0%ED%83%9D%20%EC%98%81%EC%97%AD_008.png)
