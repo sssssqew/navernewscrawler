@@ -621,7 +621,8 @@ def update(request):
 					URLS.append(url)
 
 				# 데이터 수집 
-				pool = multiprocessing.Pool(processes=64)  
+				pool = multiprocessing.Pool(processes=5)  
+				time.sleep(2)
 				num_news_list = pool.map(get_content, URLS) 
 				pool.close()  
 				pool.join()   
