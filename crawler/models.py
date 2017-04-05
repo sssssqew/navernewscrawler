@@ -12,9 +12,14 @@ class Keyword(models.Model):
 	relatedKeys = models.TextField(blank=True, null=True)
 	numOfNews = models.TextField()
 	created_date = models.DateTimeField(blank=True, null=True)
+	updated_date = models.DateTimeField(blank=True, null=True)
 
 	def publish(self):
 		self.created_date = timezone.now()
+		self.save()
+
+	def change(self):
+		self.updated_date = timezone.now()
 		self.save()
 
 	def __str__(self):

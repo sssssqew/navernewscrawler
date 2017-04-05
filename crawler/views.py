@@ -539,6 +539,7 @@ def update(request):
 					cnt += 1
 					key_model.category = categories[idx]
 					key_model.save(update_fields=['category'])
+					key_model.change()
 				global is_updated
 				is_updated = 1
 			except:
@@ -556,6 +557,7 @@ def update(request):
 					print "model exist in DB"
 				key_model.donut = donuts[idx]
 				key_model.save(update_fields=['donut'])
+				key_model.change()
 				global is_updated
 				is_updated = 1
 			except:
@@ -617,6 +619,7 @@ def update(request):
 				key_model.donut = donuts[idx]
 				key_model.category = categories[idx]
 				key_model.save(update_fields=['category', 'donut','numOfNews'])
+				key_model.change()
 				global is_updated
 				is_updated = 1
 
