@@ -39,8 +39,10 @@ static files 깨지면 mod_wsgi 리로드
 
 인코딩 : EUC-KR
 확장자 : CSV
-column[0] : 테마(도넛)명
-column[1] : 데이터 추출을 위한 연관검색어  
+
+column[0] : 카테고리 
+column[1] : 도넛이름
+column[2] : 연관검색어  
 
 
 * 하루치 데이터 생성
