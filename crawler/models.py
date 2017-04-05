@@ -7,7 +7,7 @@ from django.utils import timezone
 # Create your models here.
 class Keyword(models.Model):
 	name = models.CharField(max_length=30)
-	category = models.CharField(max_length=50,  blank=True, null=True)
+	category = models.CharField(max_length=100,  blank=True, null=True)
 	donut = models.CharField(max_length=50,  blank=True, null=True)
 	relatedKeys = models.TextField(blank=True, null=True)
 	numOfNews = models.TextField()

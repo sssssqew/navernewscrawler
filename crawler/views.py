@@ -137,25 +137,9 @@ def index(request):
 	# logging.info("rendering start...")
 
 	isExist = False
-	# is_saved_alarm = 0
-	# is_deleted_alarm = 0
-	# is_updated_alarm = 0
 
 	selected_keywords = []
 	context = {}
-
-	# DB 저장 체크 
-	# if is_saved:
-	# 	is_saved_alarm = 1
-	# 	is_saved = 0
-
-	# if is_deleted:
-	# 	is_deleted_alarm = 1
-	# 	is_deleted = 0
-
-	# if is_updated:
-	# 	is_updated_alarm = 1
-	# 	is_updated = 0
 
 	if request.method == 'POST':
 		selected_keywords = delete_spaces(request.POST['selected_keywords'])
@@ -568,22 +552,29 @@ def update(request):
 			keywords = request.POST['keywords']
 			keys = delete_spaces(keywords)
 
+	# for donut in donuts:
+	# 	print donut
 
+	cnt = 0
 	if request.POST.get("Category_Only"):
-		# DB 조회 
-		for idx, key in enumerate(keys):
+		# 도넛명으로 카테고리 추가 & 변경 하도록 수정 
+		for idx, donut in enumerate(donuts):
 			try:
-				key_model = Keyword.objects.get(name=key)
-				if(key_model):
+				key_models = Keyword.objects.filter(donut=donut)
+				if(key_models):
 					print "model exist in DB"
-				key_model.category = categories[idx]
-				key_model.save(update_fields=['category'])
+					
+				for key_model in key_models:
+					cnt += 1
+					key_model.category = categories[idx]
+					key_model.save(update_fields=['category'])
 				global is_updated
 				is_updated = 1
 			except:
 				print "model doesn't exist in DB"
 
 		print "* saved category only *"
+		print cnt
 
 	elif request.POST.get("Donut_Only"):
 		# DB 조회 
