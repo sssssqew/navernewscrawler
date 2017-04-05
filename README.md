@@ -54,6 +54,7 @@ column[0] : 카테고리
 column[1] : 도넛이름
 column[2] : 연관검색어  
 .......................
+![선택 영역_009.png](https://bitbucket.org/repo/baqqb6g/images/867003032-%EC%84%A0%ED%83%9D%20%EC%98%81%EC%97%AD_009.png)
 
 
 * 하루치 데이터 생성
