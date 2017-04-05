@@ -29,6 +29,7 @@
 ```
 /tmp/mod_wsgi-localhost:8000:1012/error_log
 crontab error 발생시 /var/spool/mail/sylee 에 로그가 찍힌다. (sylee 파일은 다른 이름으로 변경가능)
+static files 깨지면 mod_wsgi 리로드 
 ```
 
 
