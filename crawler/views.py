@@ -137,6 +137,13 @@ def make_condition_between_dates(crawled_data, s_date, e_date):
 	condi = np.logical_and(y_map >=  s_date, y_map <= e_date)
 	return condi, y, z
 
+def divideDate(str_date):
+	start_date_arr = str_date.split('-')
+	year = int(start_date_arr[0])
+	month = int(start_date_arr[1])
+	day = int(start_date_arr[2])
+	return year, month, day
+
 # 조회 페이지 
 def index(request):
 	global is_saved
@@ -253,17 +260,8 @@ def store(request):
 		else:
 			end_date_search = datetime.datetime.now().strftime('%Y-%m-%d')
 
-
-	start_date_arr = start_date_search.split('-')
-	START_YEAR = int(start_date_arr[0])
-	START_MONTH = int(start_date_arr[1])
-	START_DAY = int(start_date_arr[2])
-
-	end_date_arr = end_date_search.split('-')
-	END_YEAR = int(end_date_arr[0])
-	END_MONTH = int(end_date_arr[1])
-	END_DAY = int(end_date_arr[2])
-
+	START_YEAR, START_MONTH, START_DAY = divideDate(start_date_search)
+	END_YEAR, END_MONTH, END_DAY = divideDate(end_date_search)
 	days = createDaysForPeriod(START_YEAR, START_MONTH, START_DAY, END_YEAR, END_MONTH, END_DAY)
 	# print days 
 	
@@ -577,16 +575,8 @@ def update(request):
 				end_date_search = datetime.datetime.now().strftime('%Y-%m-%d')
 
 
-		start_date_arr = start_date_search.split('-')
-		START_YEAR = int(start_date_arr[0])
-		START_MONTH = int(start_date_arr[1])
-		START_DAY = int(start_date_arr[2])
-
-		end_date_arr = end_date_search.split('-')
-		END_YEAR = int(end_date_arr[0])
-		END_MONTH = int(end_date_arr[1])
-		END_DAY = int(end_date_arr[2])
-
+		START_YEAR, START_MONTH, START_DAY = divideDate(start_date_search)
+		END_YEAR, END_MONTH, END_DAY = divideDate(end_date_search)
 		days = createDaysForPeriod(START_YEAR, START_MONTH, START_DAY, END_YEAR, END_MONTH, END_DAY)
 		# print days 
 
