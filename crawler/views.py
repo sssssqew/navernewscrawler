@@ -125,6 +125,18 @@ def delete_spaces(words):
 		w_list.append(word.strip())
 	return w_list
 
+
+def make_condition_between_dates(crawled_data, s_date, e_date):
+	x = crawled_data[:, 0] # np array (keyword)
+	y = crawled_data[:, 1] # np array (date)
+	z = crawled_data[:, 2] # np array (number of news)
+
+	x_map = np.array(map(lambda p: p.encode('utf-8'), x)) # np array
+	y_map = np.array(map(lambda p: datetime.datetime.strptime(p, "%Y-%m-%d"), y)) # np array
+
+	condi = np.logical_and(y_map >=  s_date, y_map <= e_date)
+	return condi, y, z
+
 # 조회 페이지 
 def index(request):
 	global is_saved
@@ -165,16 +177,10 @@ def index(request):
 				key_model = Keyword.objects.get(name=selected_keyword)
 				if(key_model):
 					print "model exist in DB"
-					# print key_model.name (aws에서 완전히 삭제해야 동작함)
 
 				numOfNews = json.loads(key_model.numOfNews)
 				np_numOfNews = np.array(numOfNews) # list to np array
-				x = np_numOfNews[:, 0] # np array (keyword)
-				y = np_numOfNews[:, 1] # np array (date)
-				z = np_numOfNews[:, 2] # np array (number of news)
-				y_map = np.array(map(lambda p: datetime.datetime.strptime(p, "%Y-%m-%d"), y)) # np array
-
-				condition = np.logical_and(y_map >=  start_date_search, y_map <= end_date_search)
+				condition, y, z = make_condition_between_dates(np_numOfNews, start_date_search, end_date_search)
 				date = y[np.where(condition)].tolist()
 				data = z[np.where(condition)].tolist()
 
@@ -266,7 +272,6 @@ def store(request):
 		print str(key.encode('utf-8'))
 		try:
 			key_model = Keyword.objects.get(name=key)
-			# print ("\n" + key + '  is already exists in database !!') (aws에서 완전히 삭제해야 동작함)
 
 		except:
 			record_data = collections.OrderedDict()
@@ -303,7 +308,7 @@ def store(request):
 			)
 			key_model.publish()
 			key_model.save() 
-			# print ("\n" + key + '  just saved in database !!') # aws에서 완전히 삭제해야 동작함
+			
 			global is_saved
 			is_saved = 1
 
@@ -331,7 +336,6 @@ def csvWriter(request):
 			selected_keywords = []
 			file = request.FILES['file']
 			print "-------------------"
-			# print request.charset
 			csvReader = csv.reader(file)
 
 			for k in csvReader:
@@ -341,12 +345,6 @@ def csvWriter(request):
 		# 직접 입력 
 		else:
 			selected_keywords = delete_spaces(request.POST['selected_keywords'])
-
-	# try: 
-	# 	selected_keywords = delete_spaces(request.POST['selected_keywords'])
-	# 	print selected_keywords
-	# except:
-	# 	print "you haven't enter keywords !!"
 
 
 	if selected_keywords:
@@ -368,16 +366,10 @@ def csvWriter(request):
 				key_model = Keyword.objects.get(name=selected_keyword)
 				if(key_model):
 					print "model exist in DB"
-					# print key_model.name (aws에서 완전히 삭제해야 동작함)
 				
 				numOfNews = json.loads(key_model.numOfNews)
 				np_numOfNews = np.array(numOfNews) # list to np array
-				x = np_numOfNews[:, 0] # np array (keyword)
-				y = np_numOfNews[:, 1] # np array (date)
-				z = np_numOfNews[:, 2] # np array (number of news)
-				y_map = np.array(map(lambda p: datetime.datetime.strptime(p, "%Y-%m-%d"), y)) # np array
-
-				condition = np.logical_and(y_map >=  start_date_search, y_map <= end_date_search)
+				condition, y, z = make_condition_between_dates(np_numOfNews, start_date_search, end_date_search)
 				date = y[np.where(condition)].tolist()
 				data = z[np.where(condition)].tolist()
 
@@ -403,7 +395,6 @@ def delete(request):
 			selected_keywords = []
 			file = request.FILES['file']
 			print "-------------------"
-			# print request.charset
 			csvReader = csv.reader(file)
 
 			for k in csvReader:
@@ -432,17 +423,10 @@ def delete(request):
 				key_model = Keyword.objects.get(name=selected_keyword)
 				if(key_model):
 					print "model exist in DB"
-					# print key_model.name (aws에서 완전히 삭제해야 동작함)
 				
 				numOfNews = json.loads(key_model.numOfNews)
 				np_numOfNews = np.array(numOfNews) # list to np array
-				x = np_numOfNews[:, 0] # np array (keyword)
-				y = np_numOfNews[:, 1] # np array (date)
-				z = np_numOfNews[:, 2] # np array (number of news)
-				y_map = np.array(map(lambda p: datetime.datetime.strptime(p, "%Y-%m-%d"), y)) # np array
-
-				condition = np.logical_and(y_map >=  start_date_search, y_map <= end_date_search)
-
+				condition, y, z = make_condition_between_dates(np_numOfNews, start_date_search, end_date_search)
 				np_numOfNews_deleted = np_numOfNews[np.logical_not(condition)] # 특정조건을 만족하는 행 제외 
 				print type(np_numOfNews_deleted.tolist())
 
@@ -466,7 +450,6 @@ def show(request):
 			selected_keywords = []
 			file = request.FILES['file']
 			print "-------------------"
-			# print request.charset
 			csvReader = csv.reader(file)
 
 			for k in csvReader:
@@ -507,14 +490,7 @@ def show(request):
 				
 				numOfNews = json.loads(key_model.numOfNews)
 				np_numOfNews = np.array(numOfNews) # list to np array
-				x = np_numOfNews[:, 0] # np array (keyword)
-				y = np_numOfNews[:, 1] # np array (date)
-				z = np_numOfNews[:, 2] # np array (number of news)
-
-				x_map = np.array(map(lambda p: p.encode('utf-8'), x)) # np array
-				y_map = np.array(map(lambda p: datetime.datetime.strptime(p, "%Y-%m-%d"), y)) # np array
-
-				condition = np.logical_and(y_map >=  start_date_search, y_map <= end_date_search)
+				condition, y, z = make_condition_between_dates(np_numOfNews, start_date_search, end_date_search)
 				result = np_numOfNews[condition] # 특정조건을 만족하는 행 제외 
 			
 				# print result.tolist()
@@ -539,7 +515,6 @@ def update(request):
 			keywords = []
 			file = request.FILES['file']
 			print "-------------------"
-			# print request.charset
 			csvReader = csv.reader(file)
 
 			for k in csvReader:
@@ -552,8 +527,6 @@ def update(request):
 			keywords = request.POST['keywords']
 			keys = delete_spaces(keywords)
 
-	# for donut in donuts:
-	# 	print donut
 
 	cnt = 0
 	if request.POST.get("Category_Only"):
