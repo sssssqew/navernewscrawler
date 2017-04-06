@@ -61,7 +61,7 @@ def createDaysForYear(term):
 def createDaysForPeriod(s_year, s_month, s_day, e_year, e_month, e_day):
 	days = []
 	d = datetime.date(s_year, s_month, s_day)
-	while(d.year != e_year or d.month != e_month or d.day != e_day):
+	while(d.year != e_year or d.month != e_month or d.day != e_day + 1):
 		days.append(d)
 		d = d + datetime.timedelta(days=1)
 	# print days 
