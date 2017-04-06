@@ -59,7 +59,7 @@ def getNumberOfNews(query):
 	return  news_num_for_day_int
 
 def get_content(url):
-	print "searching..."
+	# print "searching..."
 	num_news = getNumberOfNews(url)
 	return num_news
 
@@ -72,6 +72,7 @@ def my_scheduled_job():
 	keywords = ['문재인', '황교안', '안희정', '안철수', '유승민', '이재명']
 	# db에 저장된 모든 키워드 메모리로 가져옴 
 	keys = Keyword.objects.all()
+	# keys = Keyword.objects.filter(donut="금리인상")
 	# print keys
 	today = datetime.datetime.now()
 
@@ -90,7 +91,7 @@ def my_scheduled_job():
 		
 	# 데이터 수집 
 	pool = multiprocessing.Pool(processes=5)  
-	time.sleep(2)
+	# time.sleep(2) # 오류남 
 	num_news_list = pool.map(get_content, URLS) 
 	pool.close()  
 	pool.join()
@@ -102,7 +103,7 @@ def my_scheduled_job():
 	for i in range(len(keys)):
 		today_news = []
 		# savekey = unicode(str(key.name.encode('utf-8')), 'utf-8')
-		print "model exists"
+		# print "model exists"
 		# print type(keys[i].name)
 		# print type(unicode(keywords[1], 'utf-8'))
 		today_news.append(keys[i].name) # save into unicode
