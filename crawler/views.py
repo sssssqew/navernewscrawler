@@ -616,9 +616,7 @@ def update(request):
 
 				# 업데이트 
 				key_model.numOfNews = json.dumps(numOfNews)
-				key_model.donut = donuts[idx]
-				key_model.category = categories[idx]
-				key_model.save(update_fields=['category', 'donut','numOfNews'])
+				key_model.save(update_fields=['numOfNews'])
 				key_model.change()
 				global is_updated
 				is_updated = 1
@@ -627,6 +625,6 @@ def update(request):
 				print "model doesn't exist in DB"
 				not_exist_keys.append(selected_keyword)
 
-		print "* saved donut, category and keyword *"
+		print "* saved keyword only*"
 
 	return HttpResponseRedirect("/")
