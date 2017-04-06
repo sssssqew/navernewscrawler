@@ -426,7 +426,7 @@ def delete(request):
 				np_numOfNews = np.array(numOfNews) # list to np array
 				condition, y, z = make_condition_between_dates(np_numOfNews, start_date_search, end_date_search)
 				np_numOfNews_deleted = np_numOfNews[np.logical_not(condition)] # 특정조건을 만족하는 행 제외 
-				print type(np_numOfNews_deleted.tolist())
+				# print type(np_numOfNews_deleted.tolist())
 
 				key_model.numOfNews = json.dumps(np_numOfNews_deleted.tolist())
 				key_model.save(update_fields=['numOfNews'])
