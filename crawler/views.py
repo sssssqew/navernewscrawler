@@ -628,3 +628,35 @@ def update(request):
 		print "* saved keyword only*"
 
 	return HttpResponseRedirect("/")
+
+
+def checkIfKeyExist(request):
+	cnt = 0
+	abcent = []
+	if request.method == 'POST':
+		# 파일 입력 
+		if 'file' in request.FILES:
+			keywords = []
+			file = request.FILES['file']
+			print "-------------------"
+			csvReader = csv.reader(file)
+
+			for k in csvReader:
+				keywords.append(k[2].decode('euc-kr'))
+
+	for idx, key in enumerate(keywords):
+			try:
+				key_model = Keyword.objects.get(name=key)
+				if(key_model):
+					cnt = cnt + 1
+					# print "model exist in DB"
+			
+			except:
+				print "model doesn't exist in DB"
+				print abcent.append(key)
+	
+	li = list(set(keywords))
+	# print cnt
+	print "csv 리스트 : " + str(len(keywords))
+	print "중복 제거 리스트 : " + str(len(li))
+	return HttpResponse(json.dumps(abcent))

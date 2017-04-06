@@ -172,6 +172,24 @@
         </form> 
 	</div>
 	</div>
+
+
+	<div style="margin-top:4%;margin-bottom: 7%">
+	<form action="{% url 'keyword_check' %}" method="post" enctype="multipart/form-data"> 
+	   	{% csrf_token %}
+		<div class="col-lg-6 col-lg-offset-3">
+		   <div class="input-group" style="float:left;width:94%;">
+                <label class="input-group-btn">
+                    <span class="btn btn-primary">
+                        Browse… <input type="file" name="file" id="file6" style="display: none;">
+                    </span>
+                </label>
+                <input type="text" id="fname-6" class="form-control" readonly="">
+            </div>
+            <input class="btn btn-default" type="submit" value="check" />
+         </div>
+     </form>
+     </div>
 	{% block content %}
 	{% endblock %}
 </body>

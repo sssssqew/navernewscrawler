@@ -157,6 +157,19 @@
           console.log('label');
           $('#fname-5').val(label);
       });
+      $('#file6').on('fileselect', function(event, numFiles, label) {
+          console.log(numFiles);
+          console.log(label);
+      });
+      // show file name 
+      $(document).on('change', '#file6', function() {
+          var input = $(this),
+              numFiles = input.get(0).files ? input.get(0).files.length : 1,
+              label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+          input.trigger('fileselect', [numFiles, label]);
+          console.log('label');
+          $('#fname-6').val(label);
+      });
     });
 
 </script>

@@ -8,4 +8,6 @@ urlpatterns = [
 	url(r'^delete/$', views.delete, name='keyword_delete'),
 	url(r'^show/$', views.show, name='keyword_show'),
 	url(r'^update/$', views.update, name='keyword_update'),
+	url(r'^check/$', views.checkIfKeyExist, name='keyword_check'),
+	
 ]
