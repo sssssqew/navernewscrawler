@@ -86,7 +86,8 @@ def my_scheduled_job():
 
 		
 	# 데이터 수집 
-	pool = multiprocessing.Pool(processes=16)  
+	pool = multiprocessing.Pool(processes=5)  
+	time.sleep(2)
 	num_news_list = pool.map(get_content, URLS) 
 	pool.close()  
 	pool.join()
