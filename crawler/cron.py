@@ -41,13 +41,16 @@ def getNumberOfNews(query):
 		r = urllib2.Request(query, headers=headers)
 		URL_source_FOR_DATE = urllib2.urlopen(r)
 	except Exception as e:
-		pass
+		URL_source_FOR_DATE.close()
+		print e
+		return 0
 
 	soup = BeautifulSoup(URL_source_FOR_DATE, 'lxml', from_encoding='utf-8')
 
 	# 기사 없음 
 	if not soup.find('div', 'title_desc all_my'):
 		URL_source_FOR_DATE.close()
+		print "no news found"
 		return 0
 
 	news_num_for_day = soup.find('div', 'title_desc all_my').select('span')[0].text.split('/')
