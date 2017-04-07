@@ -10,7 +10,7 @@
 5. 정적(static)파일 생성하기 
 -> python manage.py collectstatic
 5. manage.py 파일이 위치한 곳에서 mod_wsgi 실행하기 
--> python manage.py runmodwsgi --setup-only --user sylee --group sylee --s![선택 영역_006.png](https://bitbucket.org/repo/baqqb6g/images/3170664513-%EC%84%A0%ED%83%9D%20%EC%98%81%EC%97%AD_006.png)erver-root=/tmp/mod_wsgi-localhost:8000:1012
+-> python manage.py runmodwsgi --setup-only --user sylee --group sylee --server-root=/tmp/mod_wsgi-localhost:8000:1012
 6. 아파치 실행 또는 재실행하기 
 -> /tmp/mod_wsgi-localhost:8000:1012/apachectl start(restart)
 
