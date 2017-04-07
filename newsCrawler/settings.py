@@ -121,6 +121,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/') # if it dosen't exist, css style dosen't apply to.
 
 CRONJOBS = [
     ('0 22 * * *', 'crawler.cron.my_scheduled_job', '>> /home/leesy/dev/dna/newsCrawler/crawler/scheduled_job.log'), 
