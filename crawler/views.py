@@ -426,7 +426,7 @@ def delete(request):
 				np_numOfNews = np.array(numOfNews) # list to np array
 				condition, y, z = make_condition_between_dates(np_numOfNews, start_date_search, end_date_search)
 				np_numOfNews_deleted = np_numOfNews[np.logical_not(condition)] # 특정조건을 만족하는 행 제외 
-				print type(np_numOfNews_deleted.tolist())
+				# print type(np_numOfNews_deleted.tolist())
 
 				key_model.numOfNews = json.dumps(np_numOfNews_deleted.tolist())
 				key_model.save(update_fields=['numOfNews'])
@@ -505,6 +505,7 @@ def show(request):
 
 # 선택한 기간에 대한 크롤링 데이터를 추가하고 동시에 도넛명도 변경함 
 def update(request):
+	global is_updated
 	if request.method == 'POST':
 		# 파일 입력 
 		if 'file' in request.FILES:
@@ -540,7 +541,6 @@ def update(request):
 					key_model.category = categories[idx]
 					key_model.save(update_fields=['category'])
 					key_model.change()
-				global is_updated
 				is_updated = 1
 			except:
 				print "model doesn't exist in DB"
@@ -558,7 +558,6 @@ def update(request):
 				key_model.donut = donuts[idx]
 				key_model.save(update_fields=['donut'])
 				key_model.change()
-				global is_updated
 				is_updated = 1
 			except:
 				print "model doesn't exist in DB"
@@ -618,7 +617,6 @@ def update(request):
 				key_model.numOfNews = json.dumps(numOfNews)
 				key_model.save(update_fields=['numOfNews'])
 				key_model.change()
-				global is_updated
 				is_updated = 1
 
 			except:

@@ -10,7 +10,7 @@
 5. 정적(static)파일 생성하기 
 -> python manage.py collectstatic
 5. manage.py 파일이 위치한 곳에서 mod_wsgi 실행하기 
--> python manage.py runmodwsgi --setup-only --user sylee --group sylee --s![선택 영역_006.png](https://bitbucket.org/repo/baqqb6g/images/3170664513-%EC%84%A0%ED%83%9D%20%EC%98%81%EC%97%AD_006.png)erver-root=/tmp/mod_wsgi-localhost:8000:1012
+-> python manage.py runmodwsgi --setup-only --user sylee --group sylee --server-root=/tmp/mod_wsgi-localhost:8000:1012
 6. 아파치 실행 또는 재실행하기 
 -> /tmp/mod_wsgi-localhost:8000:1012/apachectl start(restart)
 
@@ -59,18 +59,17 @@ column[2] : 연관검색어
 * 하루치 데이터 생성
 ...........................
 시작날짜 : 데이터 얻을려는 날짜
-끝날짜 : 시작날짜 + 1
+끝날짜 : 시작날짜와 같음 
 ...........................
 
 
 * 날짜를 입력하지 않는 경우 
 ...........................
 시작날짜 : 디폴트 값
-끝날짜 : 어제 날짜 
+끝날짜 : 오늘 날짜 
 ...........................
 ```
 
-![선택 영역_009.png](https://bitbucket.org/repo/baqqb6g/images/867003032-%EC%84%A0%ED%83%9D%20%EC%98%81%EC%97%AD_009.png)
 
 ### 몰트 위스키 서버 환경설정 
 ```

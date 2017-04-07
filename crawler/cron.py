@@ -41,13 +41,16 @@ def getNumberOfNews(query):
 		r = urllib2.Request(query, headers=headers)
 		URL_source_FOR_DATE = urllib2.urlopen(r)
 	except Exception as e:
-		pass
+		URL_source_FOR_DATE.close()
+		print e
+		return 0
 
 	soup = BeautifulSoup(URL_source_FOR_DATE, 'lxml', from_encoding='utf-8')
 
 	# 기사 없음 
 	if not soup.find('div', 'title_desc all_my'):
 		URL_source_FOR_DATE.close()
+		print "no news found"
 		return 0
 
 	news_num_for_day = soup.find('div', 'title_desc all_my').select('span')[0].text.split('/')
@@ -56,7 +59,7 @@ def getNumberOfNews(query):
 	return  news_num_for_day_int
 
 def get_content(url):
-	print "searching..."
+	# print "searching..."
 	num_news = getNumberOfNews(url)
 	return num_news
 
@@ -69,6 +72,7 @@ def my_scheduled_job():
 	keywords = ['문재인', '황교안', '안희정', '안철수', '유승민', '이재명']
 	# db에 저장된 모든 키워드 메모리로 가져옴 
 	keys = Keyword.objects.all()
+	# keys = Keyword.objects.filter(donut="금리인상")
 	# print keys
 	today = datetime.datetime.now()
 
@@ -86,7 +90,8 @@ def my_scheduled_job():
 
 		
 	# 데이터 수집 
-	pool = multiprocessing.Pool(processes=16)  
+	pool = multiprocessing.Pool(processes=5)  
+	# time.sleep(2) # 오류남 
 	num_news_list = pool.map(get_content, URLS) 
 	pool.close()  
 	pool.join()
@@ -98,7 +103,7 @@ def my_scheduled_job():
 	for i in range(len(keys)):
 		today_news = []
 		# savekey = unicode(str(key.name.encode('utf-8')), 'utf-8')
-		print "model exists"
+		# print "model exists"
 		# print type(keys[i].name)
 		# print type(unicode(keywords[1], 'utf-8'))
 		today_news.append(keys[i].name) # save into unicode
