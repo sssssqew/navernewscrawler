@@ -621,7 +621,7 @@ def update(request):
 
 			except:
 				print "model doesn't exist in DB"
-				not_exist_keys.append(selected_keyword)
+				# not_exist_keys.append(selected_keyword)
 
 		print "* saved keyword only*"
 
