@@ -19,6 +19,8 @@ import csv
 import collections
 import logging
 import time
+import bisect
+
 
 from httplib import IncompleteRead
 
@@ -61,8 +63,12 @@ def createDaysForYear(term):
 def createDaysForPeriod(s_year, s_month, s_day, e_year, e_month, e_day):
 	days = []
 	d = datetime.date(s_year, s_month, s_day)
-	while(d.year != e_year or d.month != e_month or d.day != e_day + 1):
+	e = datetime.date(e_year, e_month, e_day)
+	# print d.year, d.month, d.day
+	# print e_year, e_month, e_day
+	while(d <= e):
 		days.append(d)
+		# print d
 		d = d + datetime.timedelta(days=1)
 	# print days 
 	return days
@@ -588,6 +594,11 @@ def update(request):
 				if(key_model):
 					print "model exist in DB"
 					numOfNews = json.loads(key_model.numOfNews)
+					np_numOfNews = np.array(numOfNews) # list to np array
+					y = np_numOfNews[:, 1] # np array (date)
+					# print type(y[0])
+					y_map = np.array(map(lambda p: datetime.datetime.strptime(p, "%Y-%m-%d"), y)) # np array
+					# print type(numOfNews[0][1])
 					# print key_model.name (aws에서 완전히 삭제해야 동작함)
 
 				# record_data = collections.OrderedDict()
@@ -611,8 +622,15 @@ def update(request):
 					row.append(key)
 					row.append(days[i].strftime("%Y-%m-%d"))
 					row.append(num_news_list[i])
-					numOfNews.append(row)
+					# print y_map.tolist()
+					# print type(datetime.datetime.combine(days[i], datetime.time.min))
+					day_datetime = datetime.datetime.strptime(days[i].strftime("%Y-%m-%d"), "%Y-%m-%d")
+					# print day_datetime
+					pos = bisect.bisect(y_map.tolist(), day_datetime)
+					print pos
+					numOfNews.insert(pos, row)
 
+				numOfNews = sorted(numOfNews,key=lambda x: x[1])
 				# 업데이트 
 				key_model.numOfNews = json.dumps(numOfNews)
 				key_model.save(update_fields=['numOfNews'])
