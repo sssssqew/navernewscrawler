@@ -123,6 +123,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/') # if it dosen't exist, css style dosen't apply to.
 
+# AM 1:00 
 CRONJOBS = [
-    ('0 22 * * *', 'crawler.cron.my_scheduled_job', '>> /home/leesy/dev/dna/newsCrawler/crawler/scheduled_job.log'), 
+    ('0 1 * * *', 'crawler.cron.my_scheduled_job', '>> /home/leesy/dev/dna/newsCrawler/crawler/scheduled_job.log'), 
 ]

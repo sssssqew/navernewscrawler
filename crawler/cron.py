@@ -74,7 +74,11 @@ def my_scheduled_job():
 	keys = Keyword.objects.all()
 	# keys = Keyword.objects.filter(donut="금리인상")
 	# print keys
-	today = datetime.datetime.now()
+
+	# 매일밤 새벽 1시에 전날 데이터를 크롤링하도록 수정함 (로컬타임 적용)
+	yesterday = datetime.datetime.now(tz=tz) - datetime.timedelta(days=1)
+	print yesterday
+	# print datetime.datetime.now()
 
 	URLS = []
 
@@ -83,8 +87,8 @@ def my_scheduled_job():
 		# URL 리스트 생성 
 		# unicode -> utf-8 -> string 
 		# print type(str(key.name.encode('utf-8'))) 
-		url = createUrlQuery(str(key.name.encode('utf-8')), today)
-		# url = createUrlQuery(key, today)
+		url = createUrlQuery(str(key.name.encode('utf-8')), yesterday)
+		# url = createUrlQuery(key, yesterday)
 		# print url 
 		URLS.append(url)
 
@@ -101,21 +105,21 @@ def my_scheduled_job():
 
 	# DB 저장 
 	for i in range(len(keys)):
-		today_news = []
+		yesterday_news = []
 		# savekey = unicode(str(key.name.encode('utf-8')), 'utf-8')
 		# print "model exists"
 		# print type(keys[i].name)
 		# print type(unicode(keywords[1], 'utf-8'))
-		today_news.append(keys[i].name) # save into unicode
-		today_news.append(today.strftime("%Y-%m-%d"))
-		today_news.append(num_news_list[i])
+		yesterday_news.append(keys[i].name) # save into unicode
+		yesterday_news.append(yesterday.strftime("%Y-%m-%d"))
+		yesterday_news.append(num_news_list[i])
 		# print unicode(keys[i], 'utf-8')
-		# print type(today.strftime("%Y-%m-%d"))
+		# print type(yesterday.strftime("%Y-%m-%d"))
 		# print type(num_news_list[i])
-		# print today_news
+		# print yesterday_news
 
 		numOfNews = json.loads(keys[i].numOfNews)
-		numOfNews.append(today_news)
+		numOfNews.append(yesterday_news)
 
 		# print numOfNews
 		keys[i].numOfNews = json.dumps(numOfNews)
