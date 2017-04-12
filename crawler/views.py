@@ -622,14 +622,17 @@ def update(request):
 					row.append(key)
 					row.append(days[i].strftime("%Y-%m-%d"))
 					row.append(num_news_list[i])
-					# print y_map.tolist()
-					# print type(datetime.datetime.combine(days[i], datetime.time.min))
+				
+					# 삽입 
 					day_datetime = datetime.datetime.strptime(days[i].strftime("%Y-%m-%d"), "%Y-%m-%d")
-					# print day_datetime
 					pos = bisect.bisect(y_map.tolist(), day_datetime)
 					print pos
 					numOfNews.insert(pos, row)
 
+					# 추가 
+					# numOfNews.append(row)
+
+				# 삽입
 				numOfNews = sorted(numOfNews,key=lambda x: x[1])
 				# 업데이트 
 				key_model.numOfNews = json.dumps(numOfNews)
