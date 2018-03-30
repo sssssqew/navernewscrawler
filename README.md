@@ -20,9 +20,9 @@
 
 ### 서버셋팅시 참고 사이트 
 
-* [https://github.com/GrahamDumpleton/mod_wsgi](Link URL)
-* [http://ggilrong.tistory.com/entry/Django-Apache-%EC%89%AC%EC%9A%B4-%EC%97%B0%EB%8F%99%EB%B0%A9%EB%B2%95-How-to-use-Django-with-Apache-and-modwsgi](Link URL)
-* [http://stackoverflow.com/questions/24760872/how-can-run-django-on-centos-using-wsgi](Link URL)
+* https://github.com/GrahamDumpleton/mod_wsgi
+* http://ggilrong.tistory.com/entry/Django-Apache-%EC%89%AC%EC%9A%B4-%EC%97%B0%EB%8F%99%EB%B0%A9%EB%B2%95-How-to-use-Django-with-Apache-and-modwsgi
+* http://stackoverflow.com/questions/24760872/how-can-run-django-on-centos-using-wsgi
 
 ### 에러처리 
 
